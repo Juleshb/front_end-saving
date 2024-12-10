@@ -45,7 +45,7 @@ function Signup() {
                   />
                   <button className="mt-5 mb-3 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                     <span className="ml-3">Sign Up</span>
-                  </button>
+                  </button> 
 
                   <Link className=' mt-2 hover:underline hover:text-blue-600' to="/">I have account</Link>
                 </div>
