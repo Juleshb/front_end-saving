@@ -40,7 +40,7 @@ function Login() {
         setShowFailureMessage(false);
         setSuccessMessage("You have logged in successfully!");
 
-        navigate("/Dashboard");
+        navigate("/OtpVerify");
       } else {
         console.error("Login failed:", response.statusText);
         setShowFailureMessage(true);
@@ -81,14 +81,9 @@ function Login() {
           <div className=" xl:w-5/12 p-6 sm:p-12 bg-white shadow-md rounded-md">
             <div></div>
             <div className="mt-12 flex flex-col items-center">
-              <h1 className="text-2xl xl:text-3xl ">Create account</h1>
+              <h1 className="text-2xl xl:text-3xl ">Login</h1>
               <div className="w-full flex-1 mt-8">
-                <div className="flex flex-col items-center">
-                  <button className="w-full max-w-xs   rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none  focus:shadow-sm focus:shadow-outline">
-                    <div className="bg-white p-2 rounded-full"></div>
-                    <span className="ml-4">Login with Google</span>
-                  </button>
-                </div>
+             
 
                 <div className="my-12 border-b text-center">
                   {showSuccessMessage && (
