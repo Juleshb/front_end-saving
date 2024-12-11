@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const [emailOrPhone, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [showFailureMessage, setShowFailureMessage] = useState(false);
@@ -20,7 +20,7 @@ function Login() {
     setShowButton(false);
     setShowLoader(true);
     const logindata = {
-      email: email,
+      emailOrPhone: emailOrPhone,
       password: password
     };
     try {
@@ -28,7 +28,9 @@ function Login() {
         "http://localhost:9000/api/users/login",
         logindata
       );
-      const { token, user } = response.data;
+      const { token } = response.data;
+      console.log(response.data);
+
       if (response.status === 200 && token) {
         setAuthData({ token });
         localStorage.setItem("token", token);
@@ -40,12 +42,13 @@ function Login() {
         setShowFailureMessage(false);
         setSuccessMessage("You have logged in successfully!");
 
-        navigate("/OtpVerify");
+       
       } else {
-        console.error("Login failed:", response.statusText);
-        setShowFailureMessage(true);
-        setShowSuccessMessage(false);
-        setErrorMessage("Failed to login: Invalid response from server.");
+        console.error("Login failed:", response.data.message);
+         setShowSuccessMessage(true);
+        setSuccessMessage("OTP sent to your email. Please confirm to proceed}");
+        navigate("/OtpVerify");
+
       }
     } catch (error) {
       if (error.response) {
@@ -107,7 +110,7 @@ function Login() {
                       className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                       type="email"
                       placeholder="Email"
-                      value={email}
+                      value={emailOrPhone}
                       onChange={(e) => setEmail(e.target.value)}
                     />
                     <input
