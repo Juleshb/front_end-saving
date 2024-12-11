@@ -15,7 +15,7 @@ function OtpVerify() {
   const handleSubmit = async (event) =>{
     event.preventDefault();
 
-    const OtpVerify = {
+    const OtpVerify = { 
       emailOrPhone: emailOrPhone,
       otp: otp
     };

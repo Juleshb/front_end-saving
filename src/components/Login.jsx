@@ -22,7 +22,7 @@ function Login() {
     const logindata = {
       emailOrPhone: emailOrPhone,
       password: password
-    };
+    };  
     try {
       const response = await axios.post(
         "http://localhost:9000/api/users/login",
