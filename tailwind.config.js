@@ -1,14 +1,42 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}",
-    'node_modules/preline/dist/*.js',
-  ],
-  
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        Poppins: "Poppins"
+      },
+      colors: {
+        primary: '#10CBFF',
+        secondary: '#F5F5F5',
+        textcol: '#726E6E'
+      },
+      animation: {
+        slide: "slide 25s linear infinite"
+      },
+      keyframes: {
+        slide: {
+          "0%,100%" : {transform: "translateX(5%)"},
+          "50%": {transform: "translateX(-120%)"}
+        }
+      }
+    },
+    screens: {
+      xs: "480px",
+      sm: "768px",
+      md: "1060px",
+
+      'sm': {'max': '639px'},
+      'xs': {'max':'414px'}
+     
+    },
+    variants: {
+      extend: {
+        padding: ['hover', 'focus'],
+      },
+    },
+    
+
   },
-  plugins: [  require('preline/plugin'),],
-};
-
-
- 
+  plugins: [],
+}

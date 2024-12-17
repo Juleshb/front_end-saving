@@ -1,12 +1,14 @@
 import React from 'react'
 import Sidebar from './Sidebar'
+import Navbar from './nav'
 
 function Account() {
   return (
 <>
-
+<Sidebar />
+<div className="relative md:ml-64 bg-blueGray-100">
+<Navbar />
 <div className=" flex">
-        <Sidebar />
         <div className=" w-full h-[100vh] bg-[#f5f7fa]">
           <div className=" bg-white w-full p-3 flex justify-between relative fixed">
             <p className=" text-3xl p-3">Account owner</p>
@@ -424,6 +426,7 @@ Expense                </p>
             </div>
           </div>
         </div>
+      </div>
       </div>
 </>
 

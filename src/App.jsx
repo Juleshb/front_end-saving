@@ -4,7 +4,7 @@ import Login from "./components/Login";
 import OtpVerify from "./components/OtpVerify";
 import Dashboard from "./components/pages/Admin/Dashboard";
 import ResetPassword from "./components/resetpassword";
-import UsersTable from "./components/UsersTable";
+import UsersTable from "./components/pages/Admin/UsersTable";
 import Account from "./components/pages/Admin/Account";
 
 function App() {
