@@ -1,8 +1,134 @@
-import React from 'react'
 import Sidebar from './Sidebar'
 import Navbar from './nav'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Icon } from "@iconify/react";
 
 function Account() {
+  const [accounts, setAccounts] = useState([]);
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [formData, setFormData] = useState({
+    user_id: "",
+    balance: "",
+    amount: "",
+    description: "",
+  });
+
+  const token = localStorage.getItem("token"); 
+  const axiosInstance = axios.create({
+    baseURL: "http://localhost:9000/api",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  useEffect(() => {
+    const fetchAccounts = async () => {
+      try {
+        const response = await axiosInstance.get("/accounts");
+        setAccounts(response.data);
+        setLoading(false);
+      } catch (error) {
+        setError("Failed to fetch accounts.");
+        setLoading(false);
+      }
+    };
+    fetchAccounts();
+  }, []);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleModal = (type, account = null) => {
+    setModalType(type);
+    setSelectedAccount(account);
+    setFormData({
+      user_id: account?.user_id || "",
+      balance: account?.balance || "",
+      amount: "",
+      description: "",
+    });
+    setShowModal(true);
+  };
+
+  const handleCreate = async () => {
+    try {
+      const response = await axiosInstance.post("/accounts", {
+        user_id: formData.user_id,
+        balance: formData.balance,
+      });
+      setAccounts([...accounts, { ...formData, account_id: response.data.accountId }]);
+      setShowModal(false);
+      alert("Account created successfully.");
+    } catch (error) {
+      alert("Failed to create account.");
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      await axiosInstance.put(`/accounts/${selectedAccount.account_id}`, {
+        balance: formData.balance,
+      });
+      setAccounts(
+        accounts.map((account) =>
+          account.account_id === selectedAccount.account_id
+            ? { ...account, balance: formData.balance }
+            : account
+        )
+      );
+      setShowModal(false);
+      alert("Account updated successfully.");
+    } catch (error) {
+      alert("Failed to update account.");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this account?")) {
+      try {
+        await axiosInstance.delete(`/accounts/${id}`);
+        setAccounts(accounts.filter((account) => account.account_id !== id));
+        alert("Account deleted successfully.");
+      } catch (error) {
+        alert("Failed to delete account.");
+      }
+    }
+  };
+
+  const handleDeposit = async () => {
+    try {
+      await axiosInstance.post(`/accounts/${selectedAccount.account_id}/deposit`, {
+        amount: formData.amount,
+        description: formData.description,
+      });
+      setShowModal(false);
+      alert("Deposit successful.");
+    } catch (error) {
+      alert("Failed to deposit.");
+    }
+  };
+
+  const handleWithdraw = async () => {
+    try {
+      await axiosInstance.post(`/accounts/${selectedAccount.account_id}/withdraw`, {
+        amount: formData.amount,
+        description: formData.description,
+      });
+      setShowModal(false);
+      alert("Withdrawal successful.");
+    } catch (error) {
+      alert("Failed to withdraw.");
+    }
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
   return (
 <>
 <Sidebar />
@@ -264,170 +390,152 @@ Expense                </p>
             </div>
           </div>
 
-          <div className="flex flex-col">
-            <div className="-m-1.5 overflow-x-auto">
-              <div className="p-1.5 min-w-full  align-middle flex justify-center items-center ">
-                <div className="overflow-hidden bg-white lg:w-11/12 rounded-xl ">
-                  <p className=" text-xl font-semibold">
-                    Active Loans Overview
-                  </p>
-                  <table className="min-w-full divide-y  divide-gray-200 ">
-                    <thead>
-                      <tr>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-start text-lg font-medium text-gray-500 uppercase "
-                        >
-                          Name
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-start text-lg font-medium text-gray-500 uppercase "
-                        >
-                          Age
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-start text-lg font-medium text-gray-500 uppercase "
-                        >
-                          Address
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-start text-lg font-medium text-gray-500 uppercase "
-                        >
-                          Type
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-start text-lg font-medium text-gray-500 uppercase "
-                        >
-                          Amount
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-start text-lg font-medium text-gray-500 uppercase "
-                        >
-                          Date
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
-                    
-                      <tr className="hover:bg-gray-100  border border-l-0 border-r-0 border-t-0">
-                        <td className="px-6 py-4 whitespace-nowrap text-xl font-medium text-gray-800 ">
-                          Kenny Eddy
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                        #12548796                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          Musanze
-                        </td>
-                        
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          133,000 Frw
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          12/01/2024
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          <button className=" p-2 w-44 rounded-full border-blue-600 border-2"> Download</button>
-                        </td>
-                      </tr>
-                      
-                      <tr className="hover:bg-gray-100  border border-l-0 border-r-0 border-t-0">
-                        <td className="px-6 py-4 whitespace-nowrap text-xl font-medium text-gray-800 ">
-                          Kenny Eddy
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                        #12548796                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          Musanze
-                        </td>
-                        
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          133,000 Frw
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          12/01/2024
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          <button className=" p-2 w-44 rounded-full border-blue-600 border-2"> Download</button>
-                        </td>
-                      </tr>
-                      
-                      <tr className="hover:bg-gray-100  border border-l-0 border-r-0 border-t-0">
-                        <td className="px-6 py-4 whitespace-nowrap text-xl font-medium text-gray-800 ">
-                          Kenny Eddy
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                        #12548796                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          Musanze
-                        </td>
-                        
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          133,000 Frw
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          12/01/2024
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          <button className=" p-2 w-44 rounded-full border-blue-600 border-2"> Download</button>
-                        </td>
-                      </tr>
-                      
-                      <tr className="hover:bg-gray-100  border border-l-0 border-r-0 border-t-0">
-                        <td className="px-6 py-4 whitespace-nowrap text-xl font-medium text-gray-800 ">
-                          Kenny Eddy
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                        #12548796                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          Musanze
-                        </td>
-                        
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          133,000 Frw
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          12/01/2024
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          <button className=" p-2 w-44 rounded-full border-blue-600 border-2"> Download</button>
-                        </td>
-                      </tr>
-                      
-                      <tr className="hover:bg-gray-100  border border-l-0 border-r-0 border-t-0">
-                        <td className="px-6 py-4 whitespace-nowrap text-xl font-medium text-gray-800 ">
-                          Kenny Eddy
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                        #12548796                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          Musanze
-                        </td>
-                        
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          133,000 Frw
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          12/01/2024
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-xl text-gray-800 ">
-                          <button className=" p-2 w-44 rounded-full border-blue-600 border-2"> Download</button>
-                        </td>
-                      </tr>
-                      
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+          <div className="p-6">
+     
+      <button
+        onClick={() => handleModal("create")}
+        className="mb-4 bg-primary text-white px-4 py-2 rounded hover:bg-blue-600"
+      >
+        New Account
+      </button>
+      <table className="min-w-full bg-white border border-gray-200">
+        <thead>
+          <tr className="bg-gray-200 text-gray-600 uppercase text-sm">
+            <th className="py-3 px-6 text-left">Account ID</th>
+            <th className="py-3 px-6 text-left">User ID</th>
+            <th className="py-3 px-6 text-left">Balance</th>
+            <th className="py-3 px-6 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {accounts.map((account) => (
+            <tr key={account.account_id} className="hover:bg-gray-100">
+              <td className="py-3 px-6">{account.account_id}</td>
+              <td className="py-3 px-6">{account.user_id}</td>
+              <td className="py-3 px-6">Frw{account.balance}</td>
+              <td className="py-3 px-6 flex gap-2">
+                <button
+                  onClick={() => handleModal("update", account)}
+                  className="bg-primary text-white px-3 py-1 rounded hover:bg-indigo-600"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleModal("deposit", account)}
+                  className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                >
+                  Deposit
+                </button>
+                <button
+                  onClick={() => handleModal("withdraw", account)}
+                  className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                >
+                  Withdraw
+                </button>
+                <button
+                  onClick={() => handleDelete(account.account_id)}
+                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-4">
+              {modalType === "create" && "Create Account"}
+              {modalType === "update" && "Update Account"}
+              {modalType === "deposit" && "Deposit to Account"}
+              {modalType === "withdraw" && "Withdraw from Account"}
+            </h2>
+
+            {modalType === "create" && (
+              <>
+                <input
+                  name="user_id"
+                  placeholder="User ID"
+                  value={formData.user_id}
+                  onChange={handleChange}
+                  className="w-full mb-4 px-3 py-2 border rounded"
+                />
+                <input
+                  name="balance"
+                  placeholder="Initial Balance"
+                  value={formData.balance}
+                  onChange={handleChange}
+                  className="w-full mb-4 px-3 py-2 border rounded"
+                />
+                <button
+                  onClick={handleCreate}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                  Create
+                </button>
+              </>
+            )}
+
+            {modalType === "update" && (
+              <>
+                <input
+                  name="balance"
+                  placeholder="Balance"
+                  value={formData.balance}
+                  onChange={handleChange}
+                  className="w-full mb-4 px-3 py-2 border rounded"
+                />
+                <button
+                  onClick={handleUpdate}
+                  className="bg-primary text-white px-4 py-2 rounded hover:bg-indigo-600"
+                >
+                  Update
+                </button>
+              </>
+            )}
+
+            {(modalType === "deposit" || modalType === "withdraw") && (
+              <>
+                <input
+                  name="amount"
+                  placeholder="Amount"
+                  value={formData.amount}
+                  onChange={handleChange}
+                  className="w-full mb-4 px-3 py-2 border rounded"
+                />
+                <input
+                  name="description"
+                  placeholder="Description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  className="w-full mb-4 px-3 py-2 border rounded"
+                />
+                <button
+                  onClick={modalType === "deposit" ? handleDeposit : handleWithdraw}
+                  className={`${
+                    modalType === "deposit" ? "bg-green-500" : "bg-yellow-500"
+                  } text-white px-4 py-2 rounded hover:opacity-80`}
+                >
+                  {modalType === "deposit" ? "Deposit" : "Withdraw"}
+                </button>
+              </>
+            )}
+            <button
+              onClick={() => setShowModal(false)}
+              className="mt-4 bg-gray-500 text-white px-4 py-2 rounded"
+            >
+              Close
+            </button>
           </div>
         </div>
-      </div>
-      </div>
+      )}
+    </div>
+        </div>
+      </div>   
+    </div>
 </>
 
   )
