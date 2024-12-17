@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Icon } from "@iconify/react";
+import Sidebar from './Sidebar'
+import Navbar from "./nav";
 
 const UsersTable = () => {
   const [users, setUsers] = useState([]);
@@ -18,8 +20,8 @@ const UsersTable = () => {
         const response = await axios.get("http://localhost:9000/api/users");
   
         if (response.data && Array.isArray(response.data)) {
-          setUsers(response.data); // Set the original users
-          setFilteredUsers(response.data); // Initialize filtered users
+          setUsers(response.data); 
+          setFilteredUsers(response.data); 
         } else {
           throw new Error("Invalid data format received");
         }
@@ -27,7 +29,7 @@ const UsersTable = () => {
         console.error("Error fetching users:", error.message);
         setError("Failed to fetch users. Please try again.");
       } finally {
-        setLoading(false); // Ensure loading is set to false
+        setLoading(false); 
       }
     };
   
@@ -39,7 +41,6 @@ const UsersTable = () => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
   
-    // Filter without modifying the original 'users' state
     const filtered = users.filter(
       (user) =>
         user.name.toLowerCase().includes(query) ||
@@ -111,8 +112,11 @@ const UsersTable = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 p-6">
-      <div className="max-w-7xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
+<>
+<Sidebar />
+<div className="relative md:ml-64 bg-blueGray-100">
+<Navbar/>
+      <div className="max-w-7xl mt-20 mx-auto bg-white shadow-md rounded-lg overflow-hidden">
       <div className="flex justify-between items-center p-4">
           <h1 className="text-2xl font-bold">All Members</h1>
           <input
@@ -120,7 +124,7 @@ const UsersTable = () => {
             placeholder="Search by Name, Email, or NID..."
             value={searchQuery}
             onChange={handleSearch}
-            className="w-1/3 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+            className="w-1/3 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
           />
         </div>
         <div className="overflow-x-auto">
@@ -146,7 +150,7 @@ const UsersTable = () => {
           </button>
           <button
             onClick={() => handleEdit(user)}
-            className="bg-indigo-500 text-white px-3 py-1 rounded-lg hover:bg-indigo-600"
+            className="bg-primary text-white px-3 py-1 rounded-lg hover:bg-indigo-600"
           >
             <Icon icon="la:edit" width="24" height="24" />
           </button>
@@ -400,6 +404,7 @@ const UsersTable = () => {
 
       
     </div>
+</>
   );
 };
 
