@@ -3,6 +3,7 @@ import Signup from "./components/signup";
 import Login from "./components/Login";
 import OtpVerify from "./components/OtpVerify";
 import Dashboard from "./components/pages/Admin/Dashboard";
+import Account from "./components/pages/Admin/Account";
 function App() {
   return (
     <>
@@ -11,6 +12,8 @@ function App() {
        <Route path="/OtpVerify" element={<OtpVerify/>}/> 
        <Route path="/" element={<Login/>}/> 
        <Route path="/Dashboard" element={<Dashboard/>}/> 
+       <Route path="/Account" element={<Account/>}/> 
+
 
      </Routes>
      </> 
