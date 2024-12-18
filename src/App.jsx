@@ -7,6 +7,7 @@ import ResetPassword from "./components/resetpassword";
 import UsersTable from "./components/pages/Admin/UsersTable";
 import Account from "./components/pages/Admin/Account";
 import TransactionsTable from "./components/pages/Admin/TransactionsTable";
+import Loans from "./components/pages/Admin/Loans";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
        <Route path="/Dashboard" element={<Dashboard/>}/> 
        <Route path="/Account" element={<Account/>}/>
        <Route path="/Transactions" element={<TransactionsTable/>}/> 
+       <Route path="/loans" element={<Loans/>}/> 
 
 
        <Route path="/users" element={<UsersTable/>}/> 
