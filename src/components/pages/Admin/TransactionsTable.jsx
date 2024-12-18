@@ -157,7 +157,7 @@ const TransactionsTable = () => {
         <div className="mb-4 p-4 bg-gray-100 rounded">
           <h2 className="text-lg font-semibold">Transaction Summary</h2>
           <p>Total Transactions: {summary.total_transactions}</p>
-          <p>Total Amount: ${summary.total_amount}</p>
+          <p>Total Amount: Frw {summary.total_amount}</p>
         </div>
       )}
 
@@ -217,7 +217,7 @@ const TransactionsTable = () => {
 
               <td className="py-4 px-6">
                 <button className="text-blue-600 border border-blue-500 px-3 py-1 rounded-full hover:bg-blue-100">
-                  Download
+                <Icon icon="line-md:downloading-loop" width="24" height="24" />
                 </button>
               </td>
             </tr>
