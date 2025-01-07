@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Logo from "./assets/logo.png";
 
 function Login() {
   const [emailOrPhone, setEmail] = useState("");
@@ -68,63 +69,129 @@ function Login() {
   };
 
   return (
-    <>
-      <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
-        <div className="max-w-screen-xl m-0 sm:m-10 bg-grey-100 flex justify-center flex-1">
-          <div className="xl:w-5/12 p-6 sm:p-12 bg-white shadow-md rounded-md">
-            <div></div>
-            <div className="mt-12 flex flex-col items-center">
-              <h1 className="text-2xl xl:text-3xl">Login</h1>
-              <div className="w-full flex-1 mt-8">
-                <div className="my-12 border-b text-center">
-                  {showSuccessMessage && (
-                    <div className="border-dotted px-4 py-3 border-2 border-green-500 text-sm text-green-700 bg-green-100 text-center flex justify-between mt-4">
-                      <p className="items-center flex">{successMessage}</p>
-                      <button onClick={closeSuccessMessage}>Close</button>
-                    </div>
-                  )}
+    <div className="relative min-h-screen flex items-center justify-center">
+      {/* Background Image with Opacity */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage:
+            "url('https://integrio.net/static/b524ff52ea906c5326c8034aceb4777e/Digital-Transformation-for-Financial-Services-in-2024.png')", // Replace with your image URL
+        }}
+      ></div>
+      <div className="absolute inset-0 bg-black opacity-50"></div>
 
-                  {showFailureMessage && (
-                    <div className="border-dotted px-4 py-3 border-2 border-red-500 text-sm text-red-500 bg-red-100 text-center flex justify-between mt-4">
-                      <p className="items-center flex">{errorMessage}</p>
-                      <button onClick={closeFailureMessage}>Close</button>
-                    </div>
-                  )}
-                </div>
+      {/* Content */}
+      <div className="relative max-w-md w-full bg-white shadow-lg rounded-lg p-6">
+        {/* Logo */}
+        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
+          <img
+            src={Logo}
+            alt="Logo"
+            className="h-20 w-20 rounded-full border-4 border-white shadow-md"
+          />
+        </div>
 
-                <form onSubmit={handleSubmit}>
-                  <div className="mx-auto max-w-xs">
-                    <input
-                      className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                      type="text"
-                      placeholder="Email or Phone"
-                      value={emailOrPhone}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <input
-                      className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                      type="password"
-                      placeholder="Password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <button className="mt-5 mb-3 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
-                      <span className="ml-3">Login</span>
-                    </button>
-                    <Link
-                      className="mt-2 hover:underline hover:text-blue-600"
-                      to="/Signup"
-                    >
-                      Create account
-                    </Link>
-                  </div>
-                </form>
-              </div>
-            </div>
+        <h1 className="text-3xl font-bold text-center text-indigo-600 mt-12 mb-6">
+          Welcome Back
+        </h1>
+        <p className="text-center text-gray-600 mb-8">
+          Enter your details to access your account
+        </p>
+
+        {showSuccessMessage && (
+          <div className="mb-4 border-l-4 border-green-500 bg-green-50 p-4 text-green-700 rounded">
+            {successMessage}
           </div>
+        )}
+
+        {showFailureMessage && (
+          <div className="mb-4 border-l-4 border-red-500 bg-red-50 p-4 text-red-700 rounded">
+            {errorMessage}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label
+              htmlFor="emailOrPhone"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email or Phone
+            </label>
+            <input
+              id="emailOrPhone"
+              type="text"
+              placeholder="Enter your email or phone"
+              value={emailOrPhone}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-gray-700"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-gray-700"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300"
+          >
+            {showLoader ? (
+              <span className="flex justify-center items-center">
+                <svg
+                  className="animate-spin h-5 w-5 mr-2 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  ></path>
+                </svg>
+                Loading...
+              </span>
+            ) : (
+              "Login"
+            )}
+          </button>
+        </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">
+            Don't have an account?{" "}
+            <Link
+              to="/Signup"
+              className="text-indigo-600 font-semibold hover:underline"
+            >
+              Sign up here
+            </Link>
+          </p>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

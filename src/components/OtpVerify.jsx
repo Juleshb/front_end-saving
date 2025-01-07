@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Logo from "./assets/logo.png";
 
 function OtpVerify() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]); // Array for OTP digits
@@ -116,11 +117,28 @@ function OtpVerify() {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
-        <div className="max-w-screen-xl m-0 sm:m-10 bg-grey-100 flex justify-center flex-1">
-          <div className="xl:w-5/12 p-6 sm:p-12 bg-white shadow-md rounded-md">
-            <div className="my-12 border-b text-center"></div>
-            <div className="flex flex-col items-center">
+ <div className="relative min-h-screen flex items-center justify-center">
+      {/* Background Image with Opacity */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage:
+            "url('https://integrio.net/static/b524ff52ea906c5326c8034aceb4777e/Digital-Transformation-for-Financial-Services-in-2024.png')", // Replace with your image URL
+        }}
+      ></div>
+      <div className="absolute inset-0 bg-black opacity-50"></div>
+
+      {/* Content */}
+      <div className="relative max-w-md w-full bg-white shadow-lg rounded-lg p-6">
+        {/* Logo */}
+        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
+          <img
+            src={Logo}
+            alt="Logo"
+            className="h-20 w-20 rounded-full border-4 border-white shadow-md"
+          />
+        </div>
+
               <h1 className="text-2xl xl:text-3xl">Verify OTP</h1>
               {showSuccessMessage && (
                 <div className="border-dotted px-4 py-3 border-2 border-green-500 text-sm text-green-700 bg-green-100 text-center flex justify-between mt-4">
@@ -177,8 +195,6 @@ function OtpVerify() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
     </>
   );
 }

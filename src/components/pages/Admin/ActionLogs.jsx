@@ -21,7 +21,7 @@ const ActionLogs = () => {
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const response = await axiosInstance.get('/logs');
+        const response = await axiosInstance.get('/admin-logs');
         setLogs(response.data);
       } catch (error) {
         console.error('Error fetching logs:', error);
