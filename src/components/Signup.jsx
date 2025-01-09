@@ -1,10 +1,15 @@
 import React, { useState } from "react";
+import axios from "axios";
+import Logo from "./assets/logo.png";
+import { Link, useNavigate } from "react-router-dom";
 
 const Registration = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    password: "",
     identification_number: "",
     date_of_birth: "",
     place_of_birth: "",
@@ -38,33 +43,46 @@ const Registration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:9000/api/users/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const response = await axios.post("http://localhost:9000/api/users/register", formData);
 
-      const data = await response.json();
-      if (response.ok) {
-        setSuccessMessage(data.message);
+      if (response.status === 201) {
+        setSuccessMessage("Registration successful! check your Email");
         setErrorMessage("");
+        navigate("/");
       } else {
-        setErrorMessage(data.message);
+        setErrorMessage(response.data.message || "Registration failed.");
         setSuccessMessage("");
       }
     } catch (error) {
-      setErrorMessage("Something went wrong. Please try again.");
+      setErrorMessage(error.response?.data?.message || "Something went wrong. Please try again.");
       setSuccessMessage("");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
-      <div className="max-w-screen-xl m-0 sm:m-10 bg-grey-100 flex justify-center flex-1">
-        <div className="xl:w-5/12 p-6 sm:p-12 bg-white shadow-md rounded-md">
-          <div className="my-12 border-b text-center">
+  <div className="relative min-h-screen flex items-center justify-center">
+       {/* Background Image with Opacity */}
+       <div
+         className="absolute inset-0 bg-cover bg-center"
+         style={{
+           backgroundImage:
+             "url('https://integrio.net/static/b524ff52ea906c5326c8034aceb4777e/Digital-Transformation-for-Financial-Services-in-2024.png')", // Replace with your image URL
+         }}
+       ></div>
+       <div className="absolute inset-0 bg-black opacity-50"></div>
+ 
+       {/* Content */}
+       <div className="relative max-w-md w-full bg-white shadow-lg rounded-lg p-6">
+         {/* Logo */}
+         <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
+           <img
+             src={Logo}
+             alt="Logo"
+             className="h-20 w-20 rounded-full border-4 border-white shadow-md"
+           />
+         </div>
             <h1 className="text-2xl xl:text-3xl">Registration</h1>
-          </div>
+        
           <div className="flex flex-col items-center">
             {successMessage && (
               <div className="border-dotted px-4 py-3 border-2 border-green-500 text-sm text-green-700 bg-green-100 text-center flex justify-between mt-4">
@@ -80,37 +98,44 @@ const Registration = () => {
               {step === 1 && (
                 <>
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="text"
                     name="name"
                     placeholder="Name"
                     value={formData.name}
                     onChange={handleChange}
+                    required
                   />
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="email"
                     name="email"
                     placeholder="Email"
                     value={formData.email}
                     onChange={handleChange}
+                    required
                   />
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="text"
                     name="identification_number"
                     placeholder="Identification Number"
                     value={formData.identification_number}
                     onChange={handleChange}
+                    required
                   />
-                  <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                    type="date"
-                    name="date_of_birth"
-                    placeholder="Date of Birth"
-                    value={formData.date_of_birth}
+                  <select
+                    name="marital_status"
+                    value={formData.marital_status}
                     onChange={handleChange}
-                  />
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    required
+                  >
+                    <option value="single">Single</option>
+                    <option value="married">Married</option>
+                    <option value="divorced">Divorced</option>
+                    <option value="widowed">Widowed</option>
+                  </select>
                   <button
                     type="button"
                     onClick={handleNext}
@@ -123,36 +148,40 @@ const Registration = () => {
               {step === 2 && (
                 <>
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    type="date"
+                    name="date_of_birth"
+                    placeholder="Date of Birth"
+                    value={formData.date_of_birth}
+                    onChange={handleChange}
+                    required
+                  />
+                  <input
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="text"
                     name="place_of_birth"
                     placeholder="Place of Birth"
                     value={formData.place_of_birth}
                     onChange={handleChange}
+                    required
                   />
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="text"
                     name="residence_place"
                     placeholder="Residence Place"
                     value={formData.residence_place}
                     onChange={handleChange}
+                    required
                   />
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="text"
                     name="telephone"
                     placeholder="Telephone"
                     value={formData.telephone}
                     onChange={handleChange}
-                  />
-                  <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                    type="text"
-                    name="address"
-                    placeholder="Address"
-                    value={formData.address}
-                    onChange={handleChange}
+                    required
                   />
                   <button
                     type="button"
@@ -173,19 +202,43 @@ const Registration = () => {
               {step === 3 && (
                 <>
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="text"
-                    name="position"
-                    placeholder="Position"
-                    value={formData.position}
+                    name="spouse_name"
+                    placeholder="Spouse Name"
+                    value={formData.spouse_name}
                     onChange={handleChange}
                   />
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="text"
-                    name="place_of_working"
-                    placeholder="Place of Working"
-                    value={formData.place_of_working}
+                    name="spouse_id_number"
+                    placeholder="Spouse ID Number"
+                    value={formData.spouse_id_number}
+                    onChange={handleChange}
+                  />
+                  <input
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    type="text"
+                    name="spouse_telephone"
+                    placeholder="Spouse Telephone"
+                    value={formData.spouse_telephone}
+                    onChange={handleChange}
+                  />
+                  <input
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    type="number"
+                    name="shares"
+                    placeholder="Shares"
+                    value={formData.shares}
+                    onChange={handleChange}
+                  />
+                  <input
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    type="number"
+                    name="monthly_saving"
+                    placeholder="Monthly Saving"
+                    value={formData.monthly_saving}
                     onChange={handleChange}
                   />
                   <button
@@ -204,10 +257,20 @@ const Registration = () => {
                 </>
               )}
             </form>
+            <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">
+            Don have an account?{" "}
+            <Link
+              to="/"
+              className="text-indigo-600 font-semibold hover:underline"
+            >
+              Login up here
+            </Link>
+          </p>
+        </div>
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

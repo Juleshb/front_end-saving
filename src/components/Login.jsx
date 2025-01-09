@@ -75,7 +75,7 @@ function Login() {
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage:
-            "url('https://integrio.net/static/b524ff52ea906c5326c8034aceb4777e/Digital-Transformation-for-Financial-Services-in-2024.png')", // Replace with your image URL
+            "url('https://kasisto.com/wp-content/uploads/2023/03/KAS230218-February-Blog-i.02-1200x712.jpg')", // Replace with your image URL
         }}
       ></div>
       <div className="absolute inset-0 bg-black opacity-50"></div>

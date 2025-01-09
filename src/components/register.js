@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const Registration = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    password: "",
     identification_number: "",
     date_of_birth: "",
     place_of_birth: "",
@@ -38,22 +40,17 @@ const Registration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("/api/users/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const response = await axios.post("http://localhost:9000/api/users/register", formData);
 
-      const data = await response.json();
-      if (response.ok) {
-        setSuccessMessage(data.message);
+      if (response.status === 201) {
+        setSuccessMessage("Registration successful!");
         setErrorMessage("");
       } else {
-        setErrorMessage(data.message);
+        setErrorMessage(response.data.message || "Registration failed.");
         setSuccessMessage("");
       }
     } catch (error) {
-      setErrorMessage("Something went wrong. Please try again.");
+      setErrorMessage(error.response?.data?.message || "Something went wrong. Please try again.");
       setSuccessMessage("");
     }
   };
@@ -80,37 +77,53 @@ const Registration = () => {
               {step === 1 && (
                 <>
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="text"
                     name="name"
                     placeholder="Name"
                     value={formData.name}
                     onChange={handleChange}
+                    required
                   />
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="email"
                     name="email"
                     placeholder="Email"
                     value={formData.email}
                     onChange={handleChange}
+                    required
                   />
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                  <input
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="text"
                     name="identification_number"
                     placeholder="Identification Number"
                     value={formData.identification_number}
                     onChange={handleChange}
+                    required
                   />
-                  <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                    type="date"
-                    name="date_of_birth"
-                    placeholder="Date of Birth"
-                    value={formData.date_of_birth}
+                  <select
+                    name="marital_status"
+                    value={formData.marital_status}
                     onChange={handleChange}
-                  />
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    required
+                  >
+                    <option value="single">Single</option>
+                    <option value="married">Married</option>
+                    <option value="divorced">Divorced</option>
+                    <option value="widowed">Widowed</option>
+                  </select>
                   <button
                     type="button"
                     onClick={handleNext}
@@ -123,36 +136,40 @@ const Registration = () => {
               {step === 2 && (
                 <>
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    type="date"
+                    name="date_of_birth"
+                    placeholder="Date of Birth"
+                    value={formData.date_of_birth}
+                    onChange={handleChange}
+                    required
+                  />
+                  <input
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="text"
                     name="place_of_birth"
                     placeholder="Place of Birth"
                     value={formData.place_of_birth}
                     onChange={handleChange}
+                    required
                   />
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="text"
                     name="residence_place"
                     placeholder="Residence Place"
                     value={formData.residence_place}
                     onChange={handleChange}
+                    required
                   />
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="text"
                     name="telephone"
                     placeholder="Telephone"
                     value={formData.telephone}
                     onChange={handleChange}
-                  />
-                  <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                    type="text"
-                    name="address"
-                    placeholder="Address"
-                    value={formData.address}
-                    onChange={handleChange}
+                    required
                   />
                   <button
                     type="button"
@@ -173,19 +190,43 @@ const Registration = () => {
               {step === 3 && (
                 <>
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="text"
-                    name="position"
-                    placeholder="Position"
-                    value={formData.position}
+                    name="spouse_name"
+                    placeholder="Spouse Name"
+                    value={formData.spouse_name}
                     onChange={handleChange}
                   />
                   <input
-                    className="w-full px-8 py-4 mb-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="text"
-                    name="place_of_working"
-                    placeholder="Place of Working"
-                    value={formData.place_of_working}
+                    name="spouse_id_number"
+                    placeholder="Spouse ID Number"
+                    value={formData.spouse_id_number}
+                    onChange={handleChange}
+                  />
+                  <input
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    type="text"
+                    name="spouse_telephone"
+                    placeholder="Spouse Telephone"
+                    value={formData.spouse_telephone}
+                    onChange={handleChange}
+                  />
+                  <input
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    type="number"
+                    name="shares"
+                    placeholder="Shares"
+                    value={formData.shares}
+                    onChange={handleChange}
+                  />
+                  <input
+                    className="w-full px-8 py-4 mb-4 rounded-lg bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                    type="number"
+                    name="monthly_saving"
+                    placeholder="Monthly Saving"
+                    value={formData.monthly_saving}
                     onChange={handleChange}
                   />
                   <button
