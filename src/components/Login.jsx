@@ -29,15 +29,12 @@ function Login() {
       );
 
       if (response.status === 200) {
-        // Save email to localStorage
         localStorage.setItem("email", emailOrPhone);
 
-        // Show success message
         setSuccessMessage("OTP sent to your email. Please confirm to proceed.");
         setShowSuccessMessage(true);
         setShowFailureMessage(false);
 
-        // Navigate to OTP verification page
         navigate("/OtpVerify");
       }
     } catch (error) {
@@ -70,19 +67,16 @@ function Login() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center">
-      {/* Background Image with Opacity */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage:
-            "url('https://kasisto.com/wp-content/uploads/2023/03/KAS230218-February-Blog-i.02-1200x712.jpg')", // Replace with your image URL
+            "url('https://kasisto.com/wp-content/uploads/2023/03/KAS230218-February-Blog-i.02-1200x712.jpg')",
         }}
       ></div>
-      <div className="absolute inset-0 bg-black opacity-50"></div>
+      <div className="absolute inset-0  opacity-50"></div>
 
-      {/* Content */}
-      <div className="relative max-w-md w-full bg-white shadow-lg rounded-lg p-6">
-        {/* Logo */}
+      <div className="relative max-w-md w-full bg-white opacity-70 shadow-lg rounded-lg p-6">
         <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
           <img
             src={Logo}

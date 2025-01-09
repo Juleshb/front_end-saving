@@ -35,9 +35,8 @@ const ResetPassword = () => {
         setSuccessMessage(data.message);
         setErrorMessage("");
 
-        // Redirect to dashboard or login page after success
         setTimeout(() => {
-          navigate("/dashboard"); // Change to "/login" if needed
+          navigate("/dashboard");
         }, 2000);
       } else {
         setErrorMessage(data.message);
