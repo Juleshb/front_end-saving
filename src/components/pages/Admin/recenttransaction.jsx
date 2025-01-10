@@ -10,7 +10,7 @@ const Recenttransactions = () => {
   const token = localStorage.getItem("token");
 
   const axiosInstance = axios.create({
-    baseURL: "http://localhost:9000/api",
+    baseURL: "https://umuhuza.store/api",
     headers: {
       Authorization: `Bearer ${token}`,
     },

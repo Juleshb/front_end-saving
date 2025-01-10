@@ -18,7 +18,7 @@ const ResetPassword = () => {
         return;
       }
 
-      const response = await fetch("http://localhost:9000/api/users/reset-password", {
+      const response = await fetch("https://umuhuza.store/api/users/reset-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

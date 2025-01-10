@@ -64,7 +64,7 @@ function OtpVerify() {
 
     try {
       const response = await axios.post(
-        "http://localhost:9000/api/users/confirm-login",
+        "https://umuhuza.store/api/users/confirm-login",
         OtpVerify
       );
 

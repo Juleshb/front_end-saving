@@ -43,7 +43,7 @@ const Registration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:9000/api/users/register", formData);
+      const response = await axios.post("https://umuhuza.store/api/users/register", formData);
 
       if (response.status === 201) {
         setSuccessMessage("Registration successful! check your Email");
