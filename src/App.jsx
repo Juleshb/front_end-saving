@@ -9,6 +9,12 @@ import Account from "./components/pages/Admin/Account";
 import TransactionsTable from "./components/pages/Admin/TransactionsTable";
 import Loans from "./components/pages/Admin/Loans";
 
+import UserDashboard from "./components/pages/user/Dashboard";
+import UserUsersTable from "./components/pages/user/UsersTable";
+import UserAccount from "./components/pages/user/Account";
+import UserTransactionsTable from "./components/pages/user/TransactionsTable";
+import UserLoans from "./components/pages/user/Loans";
+
 function App() {
   return (
     <>
@@ -21,9 +27,14 @@ function App() {
        <Route path="/Account" element={<Account/>}/>
        <Route path="/Transactions" element={<TransactionsTable/>}/> 
        <Route path="/loans" element={<Loans/>}/> 
-
-
        <Route path="/users" element={<UsersTable/>}/> 
+
+
+       <Route path="/userDashboard" element={<UserDashboard/>}/> 
+       <Route path="/userAccount" element={<UserAccount/>}/>
+       <Route path="/userTransactions" element={<UserTransactionsTable/>}/> 
+       <Route path="/userloans" element={<UserLoans/>}/> 
+       <Route path="/userusers" element={<UserUsersTable/>}/> 
 
      </Routes>
      </> 

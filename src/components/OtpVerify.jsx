@@ -84,7 +84,7 @@ function OtpVerify() {
           localStorage.setItem("token", data.token);
 
           // Redirect to the dashboard or next step
-          navigate("/dashboard");
+          navigate("/userdashboard");
         }
       } else {
         setErrorMessage("Invalid or expired OTP");
