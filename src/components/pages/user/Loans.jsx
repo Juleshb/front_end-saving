@@ -17,9 +17,8 @@ function LoanTabs() {
     <Sidebar />
     <div className="relative md:ml-64 bg-blueGray-100">
     <Navbar/>
-    <div className="relative md:pt-32 pb-32 pt-10"> 
-      </div>
-        <div className="px-4 md:px-10 mx-auto w-full m-2">
+    
+        <div className="px-4 md:px-10 mx-auto sm:mt-10 mt-20 w-full m-2">
     <div className="relative flex flex-col min-w-0 break-words w-full  border border-primary">
       <div className="items-center flex flex-wrap justify-center bg-primary text-white w-full h-auto space-x-4 ">
 

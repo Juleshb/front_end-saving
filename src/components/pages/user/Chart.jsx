@@ -144,24 +144,25 @@ const CombinedChart = () => {
   return (
     <div className="flex flex-wrap gap-2 justify-between p-6">
       {/* Deposits Chart Card */}
-      <div className="w-5/12 bg-white rounded-lg shadow-md p-6 text-center">
-        <h3 className="text-lg  mb-4 text-gray-500">Deposits Over Time</h3>
-        {depositChartData ? (
-          <Line data={depositChartData} options={options} />
-        ) : (
-          <p className="text-gray-500">Loading Deposits...</p>
-        )}
-      </div>
+      <div className="hidden md:block w-5/12 bg-white rounded-lg shadow-md p-6 text-center">
+  <h3 className="text-lg mb-4 text-gray-500">Deposits Over Time</h3>
+  {depositChartData ? (
+    <Line data={depositChartData} options={options} />
+  ) : (
+    <p className="text-gray-500">Loading Deposits...</p>
+  )}
+</div>
 
-      {/* Withdrawals Chart Card */}
-      <div className="w-5/12  bg-white rounded-lg shadow-md p-6 text-center">
-        <h3 className="text-lg  mb-4 text-gray-500">Withdrawals Over Time</h3>
-        {withdrawalChartData ? (
-          <Line data={withdrawalChartData} options={options} />
-        ) : (
-          <p className="text-gray-500">Loading Withdrawals...</p>
-        )}
-      </div>
+{/* Withdrawals Chart Card */}
+<div className="hidden md:block w-5/12 bg-white rounded-lg shadow-md p-6 text-center">
+  <h3 className="text-lg mb-4 text-gray-500">Withdrawals Over Time</h3>
+  {withdrawalChartData ? (
+    <Line data={withdrawalChartData} options={options} />
+  ) : (
+    <p className="text-gray-500">Loading Withdrawals...</p>
+  )}
+</div>
+
 
       {/* Recent Transactions */}
       <div className="w-full">

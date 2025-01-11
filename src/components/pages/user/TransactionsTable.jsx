@@ -124,34 +124,43 @@ const TransactionsTable = () => {
     <Sidebar />
     <div className="relative md:ml-64 bg-blueGray-100">
     <Navbar/>
+    <div className="flex flex-wrap items-center sm:mt-10 mt-20 m-6 gap-4 mb-4">
+  <input
+    type="text"
+    placeholder="Filter by Account ID"
+    value={accountId}
+    onChange={(e) => setAccountId(e.target.value)}
+    className="flex-grow sm:flex-none px-3 py-2 border rounded w-full sm:w-auto"
+  />
+  <button 
+    onClick={handleFilterByAccount} 
+    className="bg-blue-500 text-white px-4 py-2 rounded w-full sm:w-auto"
+  >
+    Filter by Account
+  </button>
+  <select
+    value={transactionType}
+    onChange={(e) => setTransactionType(e.target.value)}
+    className="flex-grow sm:flex-none px-3 py-2 border rounded w-full sm:w-auto"
+  >
+    <option value="">Select Type</option>
+    <option value="deposit">Deposit</option>
+    <option value="withdrawal">Withdrawal</option>
+  </select>
+  <button 
+    onClick={handleFilterByType} 
+    className="bg-green-500 text-white px-4 py-2 rounded w-full sm:w-auto"
+  >
+    Filter by Type
+  </button>
+  <button 
+    onClick={handleSummary} 
+    className="bg-yellow-500 text-white px-4 py-2 rounded w-full sm:w-auto"
+  >
+    Show Summary
+  </button>
+</div>
 
-      <div className="flex mt-20 m-6 gap-4 mb-4">
-        <input
-          type="text"
-          placeholder="Filter by Account ID"
-          value={accountId}
-          onChange={(e) => setAccountId(e.target.value)}
-          className="px-3 py-2 border rounded"
-        />
-        <button onClick={handleFilterByAccount} className="bg-blue-500 text-white px-4 py-2 rounded">
-          Filter by Account
-        </button>
-        <select
-          value={transactionType}
-          onChange={(e) => setTransactionType(e.target.value)}
-          className="px-3 py-2 border rounded"
-        >
-          <option value="">Select Type</option>
-          <option value="deposit">Deposit</option>
-          <option value="withdrawal">Withdrawal</option>
-        </select>
-        <button onClick={handleFilterByType} className="bg-green-500 text-white px-4 py-2 rounded">
-          Filter by Type
-        </button>
-        <button onClick={handleSummary} className="bg-yellow-500 text-white px-4 py-2 rounded">
-          Show Summary
-        </button>
-      </div>
 
       {summary && (
         <div className="mb-4 p-4 bg-gray-100 rounded">

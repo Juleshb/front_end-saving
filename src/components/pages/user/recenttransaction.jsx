@@ -56,72 +56,75 @@ const Recenttransactions = () => {
 
   return (
     <div className="">
-      <span className="text-gray-500">Recent Transactions</span>
-      <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg overflow-x-auto">
-        <thead>
-          <tr className="bg-gray-100 text-gray-500 text-sm uppercase">
-            <th className="py-3 px-6 text-left">Date</th>
-            <th className="py-3 px-6 text-left">T. ID</th>
-            <th className="py-3 px-6 text-left">A/N</th>
-            <th className="py-3 px-6 text-left">Type</th>
-            <th className="py-3 px-6 text-left">Amount</th>
-            <th className="py-3 px-6 text-left">Receipt</th>
-          </tr>
-        </thead>
+      <span className="text-gray-500 sm:text-xs">Recent Transactions</span>
+      <div className="overflow-x-auto">
+  <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
+    <thead>
+      <tr className="bg-gray-100 text-gray-500 text-sm sm:text-xs uppercase">
+        <th className="py-3 px-6 text-left">Date</th>
+        <th className="py-3 px-6 text-left">T. ID</th>
+        <th className="py-3 px-6 text-left">A/N</th>
+        <th className="py-3 px-6 text-left">Type</th>
+        <th className="py-3 px-6 text-left">Amount</th>
+        <th className="py-3 px-6 text-left">Receipt</th>
+      </tr>
+    </thead>
 
-        <tbody>
-          {transactions.map((transaction) => (
-            <tr key={transaction.id} className="hover:bg-gray-50 border-b">
-              <td className="py-4 px-6 flex items-center">
-                <Icon
-                  icon={
-                    transaction.transaction_type === "deposit"
-                      ? "mdi:arrow-down-circle-outline"
-                      : "mdi:arrow-up-circle-outline"
-                  }
-                  className={`mr-2 text-lg ${
-                    transaction.transaction_type === "deposit" ? "text-green-500" : "text-red-500"
-                  }`}
-                />
-                <span className="text-gray-700">
-                  {new Date(transaction.transaction_date).toLocaleDateString()}
-                </span>
-              </td>
+    <tbody>
+      {transactions.map((transaction) => (
+        <tr key={transaction.id} className="hover:bg-gray-50 border-b">
+          <td className="py-4 px-6 sm:text-xs flex items-center">
+            <Icon
+              icon={
+                transaction.transaction_type === "deposit"
+                  ? "mdi:arrow-down-circle-outline"
+                  : "mdi:arrow-up-circle-outline"
+              }
+              className={`mr-2 text-lg ${
+                transaction.transaction_type === "deposit" ? "text-green-500" : "text-red-500"
+              }`}
+            />
+            <span className="text-gray-700">
+              {new Date(transaction.transaction_date).toLocaleDateString()}
+            </span>
+          </td>
 
-              <td className="py-4 px-6 text-blue-500 text-sm underline cursor-pointer">
-                {transaction.transaction_id}
-              </td>
+          <td className="py-4 px-6 text-blue-500 sm:text-xs text-sm underline cursor-pointer">
+            {transaction.transaction_id}
+          </td>
 
-              <td className="py-4 px-6 text-blue-500 text-sm underline cursor-pointer">
-                {transaction.account_id}
-              </td>
+          <td className="py-4 px-6 text-blue-500 sm:text-xs text-sm underline cursor-pointer">
+            {transaction.account_id}
+          </td>
 
-              <td className="py-4 px-6 capitalize text-sm text-gray-600">
-                {transaction.transaction_type}
-              </td>
+          <td className="py-4 px-6 capitalize text-sm text-gray-600">
+            {transaction.transaction_type}
+          </td>
 
-              <td
-                className={`py-4 px-6 text-sm ${
-                  transaction.transaction_type === "deposit" ? "text-green-500" : "text-red-500"
-                }`}
-              >
-                {transaction.transaction_type === "deposit"
-                  ? `+ Frw ${transaction.amount}`
-                  : `- Frw ${Math.abs(transaction.amount)}`}
-              </td>
+          <td
+            className={`py-4 px-6 sm:text-xs text-sm ${
+              transaction.transaction_type === "deposit" ? "text-green-500" : "text-red-500"
+            }`}
+          >
+            {transaction.transaction_type === "deposit"
+              ? `+ Frw ${transaction.amount}`
+              : `- Frw ${Math.abs(transaction.amount)}`}
+          </td>
 
-              <td className="py-4 px-6">
-                <button
-                  className="text-blue-600 border border-blue-500 px-3 py-1 rounded-full hover:bg-blue-100"
-                  onClick={() => downloadReceipt(transaction)}
-                >
-                  <Icon icon="line-md:downloading-loop" width="24" height="24" />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          <td className="py-4 px-6">
+            <button
+              className="text-blue-600 border border-blue-500 px-3 py-1 rounded-full hover:bg-blue-100"
+              onClick={() => downloadReceipt(transaction)}
+            >
+              <Icon icon="line-md:downloading-loop" width="24" height="24" />
+            </button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
     </div>
   );
 };
