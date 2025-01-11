@@ -31,7 +31,7 @@ const CombinedChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get("/transactions");
+        const response = await axiosInstance.get("/transactions/user");
         const data = response.data;
 
         const groupedData = {};

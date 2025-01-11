@@ -28,7 +28,7 @@ const TransactionPieChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get('/transactions');
+        const response = await axiosInstance.get('/transactions/user');
         const transactions = response.data;
 
         // Process data to calculate deposits and withdrawals

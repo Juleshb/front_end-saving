@@ -32,7 +32,7 @@ const TransactionsTable = () => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await axiosInstance.get("/transactions");
+        const response = await axiosInstance.get("/transactions/user");
         setTransactions(response.data);
         setFilteredTransactions(response.data);
       } catch (error) {
