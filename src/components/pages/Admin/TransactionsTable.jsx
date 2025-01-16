@@ -133,7 +133,7 @@ const TransactionsTable = () => {
           onChange={(e) => setAccountId(e.target.value)}
           className="px-3 py-2 border rounded"
         />
-        <button onClick={handleFilterByAccount} className="bg-blue-500 text-white px-4 py-2 rounded">
+        <button onClick={handleFilterByAccount} className="bg-primary text-white px-4 py-2 rounded">
           Filter by Account
         </button>
         <select
@@ -168,7 +168,7 @@ const TransactionsTable = () => {
             <th className="py-3 px-6 text-left">Description</th>
             <th className="py-3 px-6 text-left">Transaction ID</th>
             <th className="py-3 px-6 text-left">Account Number</th>
-            <th className="py-3 px-6 text-left">Type</th>
+            <th className="py-3 px-6 text-left">Account Names</th>
             <th className="py-3 px-6 text-left">Date</th>
             <th className="py-3 px-6 text-left">Amount</th>
             <th className="py-3 px-6 text-left">Receipt</th>
@@ -193,15 +193,15 @@ const TransactionsTable = () => {
               </td>
 
               <td className="py-4 px-6 text-blue-500 underline cursor-pointer">
-                {transaction.transaction_id}
+               TX-{transaction.transaction_number}
               </td>
 
-              <td className="py-4 px-6 text-blue-500 underline cursor-pointer">
-                {transaction.account_id}
+              <td className="py-4 px-6 text-gray-600 cursor-pointer">
+                {transaction.accountnumber}
               </td>
 
               <td className="py-4 px-6 capitalize text-gray-600">
-                {transaction.transaction_type}
+              {transaction.name}
               </td>
               <td className="py-4 px-6 text-gray-600">{new Date(transaction.transaction_date).toLocaleDateString()}</td>
 
@@ -216,7 +216,7 @@ const TransactionsTable = () => {
              </td>
 
               <td className="py-4 px-6">
-                <button className="text-blue-600 border border-blue-500 px-3 py-1 rounded-full hover:bg-blue-100">
+                <button className="text-blue-600 border border-primary px-3 py-1 rounded-full hover:bg-blue-100">
                 <Icon icon="line-md:downloading-loop" width="24" height="24" />
                 </button>
               </td>
@@ -264,7 +264,7 @@ const TransactionsTable = () => {
             />
             <button
               onClick={modalType === "edit" ? handleUpdateTransaction : handleAddTransaction}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              className="bg-primary text-white px-4 py-2 rounded hover:bg-blue-600"
             >
               Submit
             </button>

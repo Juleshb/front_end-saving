@@ -186,8 +186,9 @@ function Account() {
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
           <tr className="bg-gray-200 text-gray-600 uppercase text-sm">
-            <th className="py-3 px-6 text-left">Account ID</th>
-            <th className="py-3 px-6 text-left">User ID</th>
+            <th className="py-3 px-6 text-left">Names</th>
+            <th className="py-3 px-6 text-left">NID</th>
+            <th className="py-3 px-6 text-left">Account Number</th>
             <th className="py-3 px-6 text-left">Balance</th>
             <th className="py-3 px-6 text-left">Actions</th>
           </tr>
@@ -195,8 +196,9 @@ function Account() {
         <tbody>
           {accounts.map((account) => (
             <tr key={account.account_id} className="hover:bg-gray-100">
-              <td className="py-3 px-6">{account.account_id}</td>
-              <td className="py-3 px-6">{account.user_id}</td>
+              <td className="py-3 px-6">{account.name}</td>
+              <td className="py-3 px-6">{account.identification_number}</td>
+              <td className="py-3 px-6">{account.accountnumber}</td>
               <td className="py-3 px-6">Frw{account.balance}</td>
               <td className="py-3 px-6 flex gap-2">
                 <button

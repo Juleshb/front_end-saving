@@ -14,10 +14,19 @@ const UsersTable = () => {
   const [modalType, setModalType] = useState(""); 
   const [searchQuery, setSearchQuery] = useState(""); 
 
+  const token = localStorage.getItem("token");
+
+  const axiosInstance = axios.create({
+    baseURL: "https://umuhuza.store/api",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("https://umuhuza.store/api/users");
+        const response =await axiosInstance.get("/users");
   
         if (response.data && Array.isArray(response.data)) {
           setUsers(response.data); 
@@ -68,7 +77,7 @@ const UsersTable = () => {
   const handleDelete = async (userId) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       try {
-        await axios.delete(`https://umuhuza.store/api/users/${userId}`);
+        await axiosInstance.delete(`/users/${userId}`);
         setUsers(users.filter((user) => user.user_id !== userId));
         alert("User deleted successfully.");
       } catch (error) {
@@ -79,8 +88,8 @@ const UsersTable = () => {
 
   const handleUpdate = async () => {
     try {
-      const response = await axios.put(
-        `https://umuhuza.store/api/users/${selectedUser.user_id}`,
+      const response = await axiosInstance.put(
+        `/users/${selectedUser.user_id}`,
         selectedUser
       );
       setUsers(

@@ -61,9 +61,9 @@ const Recenttransactions = () => {
         <thead>
           <tr className="bg-gray-100 text-gray-500 text-sm uppercase">
             <th className="py-3 px-6 text-left">Date</th>
-            <th className="py-3 px-6 text-left">T. ID</th>
-            <th className="py-3 px-6 text-left">A/N</th>
-            <th className="py-3 px-6 text-left">Type</th>
+            <th className="py-3 px-6 text-left">Transaction ID</th>
+            <th className="py-3 px-6 text-left">Account Number</th>
+            <th className="py-3 px-6 text-left">Account Names</th>
             <th className="py-3 px-6 text-left">Amount</th>
             <th className="py-3 px-6 text-left">Receipt</th>
           </tr>
@@ -89,15 +89,15 @@ const Recenttransactions = () => {
               </td>
 
               <td className="py-4 px-6 text-blue-500 text-sm underline cursor-pointer">
-                {transaction.transaction_id}
+               TX-{transaction.transaction_number}
               </td>
 
-              <td className="py-4 px-6 text-blue-500 text-sm underline cursor-pointer">
-                {transaction.account_id}
+              <td className="py-4 px-6 text-gray-600 text-sm  cursor-pointer">
+                {transaction.accountnumber}
               </td>
 
               <td className="py-4 px-6 capitalize text-sm text-gray-600">
-                {transaction.transaction_type}
+                {transaction.name}
               </td>
 
               <td

@@ -60,14 +60,14 @@ const Recenttransactions = () => {
       <div className="overflow-x-auto">
   <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
     <thead>
-      <tr className="bg-gray-100 text-gray-500 text-sm sm:text-xs uppercase">
-        <th className="py-3 px-6 text-left">Date</th>
-        <th className="py-3 px-6 text-left">T. ID</th>
-        <th className="py-3 px-6 text-left">A/N</th>
-        <th className="py-3 px-6 text-left">Type</th>
-        <th className="py-3 px-6 text-left">Amount</th>
-        <th className="py-3 px-6 text-left">Receipt</th>
-      </tr>
+    <tr className="bg-gray-100 text-gray-500 text-sm uppercase">
+            <th className="py-3 px-6 text-left">Date</th>
+            <th className="py-3 px-6 text-left">Transaction ID</th>
+            <th className="py-3 px-6 text-left">Account Number</th>
+            <th className="py-3 px-6 text-left">Account Names</th>
+            <th className="py-3 px-6 text-left">Amount</th>
+            <th className="py-3 px-6 text-left">Receipt</th>
+          </tr>
     </thead>
 
     <tbody>
@@ -89,17 +89,17 @@ const Recenttransactions = () => {
             </span>
           </td>
 
-          <td className="py-4 px-6 text-blue-500 sm:text-xs text-sm underline cursor-pointer">
-            {transaction.transaction_id}
-          </td>
+          <td className="py-4 px-6 text-blue-500 text-sm underline cursor-pointer">
+               TX-{transaction.transaction_number}
+              </td>
 
-          <td className="py-4 px-6 text-blue-500 sm:text-xs text-sm underline cursor-pointer">
-            {transaction.account_id}
-          </td>
+              <td className="py-4 px-6 text-gray-600 text-sm  cursor-pointer">
+                {transaction.accountnumber}
+              </td>
 
-          <td className="py-4 px-6 capitalize text-sm text-gray-600">
-            {transaction.transaction_type}
-          </td>
+              <td className="py-4 px-6 capitalize text-sm text-gray-600">
+                {transaction.name}
+              </td>
 
           <td
             className={`py-4 px-6 sm:text-xs text-sm ${
