@@ -100,7 +100,7 @@ export default function Sidebar() {
               >
                 <Link to="/account" className="flex items-center">
                 <Icon icon="tabler:user-filled" width="24" height="24" className="mr-3 text-lg"/>
-                  Accounts
+                Deposit / Withdraw
                 </Link>
               </li>
               {/* Users */}

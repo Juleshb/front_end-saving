@@ -3,6 +3,7 @@ import Navbar from './nav'
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Icon } from "@iconify/react";
+import * as XLSX from "xlsx";
 
 function Account() {
   const [accounts, setAccounts] = useState([]);
@@ -10,6 +11,7 @@ function Account() {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadingup, setLoadingup] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     user_id: "",
@@ -56,20 +58,54 @@ function Account() {
     setShowModal(true);
   };
 
-  const handleCreate = async () => {
+  
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    setLoadingup(true); 
     try {
-      const response = await axiosInstance.post("/accounts", {
-        user_id: formData.user_id,
-        balance: formData.balance,
+      const response = await axiosInstance.post("/accounts/batch-deposit", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
-      setAccounts([...accounts, { ...formData, account_id: response.data.accountId }]);
-      setShowModal(false);
-      alert("Account created successfully.");
+      alert(response.data.message);
     } catch (error) {
-      alert("Failed to create account.");
+      alert("Failed to process batch deposits.");
+    } finally {
+      setLoadingup(false); 
     }
   };
 
+
+  const handleExport = () => {
+    if (accounts.length === 0) {
+      alert("No data to export!");
+      return;
+    }
+
+    const transformedData = accounts.map((account) => ({
+      account_id: account.account_id,
+      accountnumber: account.accountnumber,
+      name: account.name,
+      email: account.email,
+      balance: account.balance,
+      amount: "", 
+      description: "", 
+    }));
+
+    const now = new Date();
+    const formattedDate = now.toISOString().replace(/T/, " ").replace(/:/g, "-").split(".")[0]; 
+    const sheetName = `cepedhu ${formattedDate}`;
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(transformedData);
+    XLSX.utils.book_append_sheet(workbook, worksheet, sheetName); 
+    XLSX.writeFile(workbook, `cepedhu_${formattedDate}.xlsx`);
+  };
+  
   const handleUpdate = async () => {
     try {
       await axiosInstance.put(`/accounts/${selectedAccount.account_id}`, {
@@ -143,7 +179,7 @@ function Account() {
         <div className="text-5xl text-yellow-500 bg-yellow-100 p-4 rounded-full"><Icon icon="qlementine-icons:money-16" width="32" height="32" /></div>
         <div>
           <h3 className="text-gray-500 text-sm font-medium">Balance</h3>
-          <p className="text-2xl font-semibold text-gray-800">Frw 12,750</p>
+          <p className="text-2xl font-semibold text-gray-800">Frw 0.00</p>
         </div>
       </div>
 
@@ -152,7 +188,7 @@ function Account() {
         <div className="text-5xl text-purple-500 bg-purple-100 p-4 rounded-full"><Icon icon="game-icons:take-my-money" width="32" height="32" /></div>
         <div>
           <h3 className="text-gray-500 text-sm font-medium">Income</h3>
-          <p className="text-2xl font-semibold text-gray-800">Frw 5,600</p>
+          <p className="text-2xl font-semibold text-gray-800">Frw 0.00</p>
         </div>
       </div>
 
@@ -161,7 +197,7 @@ function Account() {
         <div className="text-5xl text-pink-500 bg-pink-100 p-4 rounded-full"><Icon icon="game-icons:pay-money" width="32" height="32" /></div>
         <div>
           <h3 className="text-gray-500 text-sm font-medium">Expense</h3>
-          <p className="text-2xl font-semibold text-gray-800">Frw 3,460</p>
+          <p className="text-2xl font-semibold text-gray-800">Frw 0.00</p>
         </div>
       </div>
 
@@ -170,7 +206,7 @@ function Account() {
         <div className="text-5xl text-teal-500 bg-teal-100 p-4 rounded-full"><Icon icon="solar:wallet-money-outline" width="32" height="32" /></div>
         <div>
           <h3 className="text-gray-500 text-sm font-medium">Total Saving</h3>
-          <p className="text-2xl font-semibold text-gray-800">Frw 7,920</p>
+          <p className="text-2xl font-semibold text-gray-800">Frw 0.00</p>
         </div>
       </div>
     </div>
@@ -178,11 +214,49 @@ function Account() {
           <div className="p-6">
      
       <button
-        onClick={() => handleModal("create")}
-        className="mb-4 bg-primary text-white px-4 py-2 rounded hover:bg-blue-600"
-      >
-        New Account
-      </button>
+            onClick={handleExport}
+            className="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600 transition"
+          >
+            Export Excel Format
+          </button>
+
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">Batch Deposit Upload</h1>
+      <div className="relative">
+        <input
+          type="file"
+          accept=".xlsx, .xls"
+          onChange={handleFileUpload}
+          disabled={loading}
+          className={`w-full mb-4 px-3 py-2 border rounded ${
+            loading ? "bg-gray-200 cursor-not-allowed" : ""
+          }`}
+        />
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-75">
+            <svg
+              className="animate-spin h-6 w-6 text-blue-500"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 2.137.835 4.085 2.209 5.576l1.791-1.285z"
+              ></path>
+            </svg>
+          </div>
+        )}
+      </div>
+  
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
           <tr className="bg-gray-200 text-gray-600 uppercase text-sm">

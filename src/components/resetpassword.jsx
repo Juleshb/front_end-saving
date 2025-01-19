@@ -36,7 +36,7 @@ const ResetPassword = () => {
         setErrorMessage("");
 
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate("/");
         }, 2000);
       } else {
         setErrorMessage(data.message);

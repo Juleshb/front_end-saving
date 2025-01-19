@@ -3,7 +3,6 @@ import { Icon } from "@iconify/react";
 import Sidebar from "./Sidebar";
 import Navbar from "./nav";
 import CombinedChart from "./Chart";
-import TransactionPieChart from "./Piechart";
 import axios from "axios";
 
 function Dashboard() {
@@ -81,8 +80,6 @@ function Dashboard() {
             <div className="w-full">
             <CombinedChart />
             </div>
-            <TransactionPieChart />
-
         </div>
       </div>
       </div>

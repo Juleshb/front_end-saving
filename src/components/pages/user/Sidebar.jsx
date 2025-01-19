@@ -105,34 +105,7 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-
-              {/* My Privileges */}
-              <li
-                className={`font-semibold px-4 py-2 mb-4 rounded-lg ${
-                  isActive("/userprivileges")
-                    ? "bg-primary text-white"
-                    : "hover:bg-gray-100 text-gray-700"
-                }`}
-              >
-                <Link to="/userprivileges" className="flex items-center">
-                  <Icon icon="ph:users-three-thin" className="mr-3 text-lg" />
-                  My Privileges
-                </Link>
-              </li>
-
-              {/* Settings */}
-              <li
-                className={`font-semibold px-4 py-2 mb-4 rounded-lg ${
-                  isActive("/usersettings")
-                    ? "bg-primary text-white"
-                    : "hover:bg-gray-100 text-gray-700"
-                }`}
-              >
-                <Link to="/usersettings" className="flex items-center">
-                <Icon icon="mage:settings-fill" width="24" height="24" className="mr-3 text-lg" />
-                  Setting
-                </Link>
-              </li>
+              
             </ul>
           </div>
 
@@ -142,7 +115,7 @@ export default function Sidebar() {
               <li
                 className="font-semibold px-4 py-2 rounded-lg hover:bg-gray-100 text-gray-700"
               >
-                <Link to="/userlogout" className="flex items-center text-red-500">
+                <Link to="/logout" className="flex items-center text-red-500">
                   <Icon
                     icon="material-symbols:logout"
                     width="24"

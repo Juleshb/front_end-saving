@@ -3,6 +3,7 @@ import axios from "axios";
 import { Icon } from "@iconify/react";
 import Sidebar from './Sidebar'
 import Navbar from "./nav";
+import BatchRegister from "./userbatchfile";
 
 const UsersTable = () => {
   const [users, setUsers] = useState([]);
@@ -86,6 +87,27 @@ const UsersTable = () => {
     }
   };
 
+  const handleUpdateRole = async (userId, newRole) => {
+    try {
+      const response = await axiosInstance.put(`/users/${userId}`, { role: newRole });
+  
+      if (response.status === 200) {
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.user_id === userId ? { ...user, role: newRole } : user
+          )
+        );
+        toast.success("User role updated successfully.");
+      }
+    } catch (error) {
+      console.error("Error updating user role:", error.message);
+      toast.error("Failed to update user role. Please try again.");
+    }
+
+    fetchUsers();
+  };
+  
+
   const handleUpdate = async () => {
     try {
       const response = await axiosInstance.put(
@@ -102,6 +124,8 @@ const UsersTable = () => {
     } catch (error) {
       alert("Failed to update user. Please try again.");
     }
+
+    fetchUsers();
   };
 
   if (loading) {
@@ -136,6 +160,7 @@ const UsersTable = () => {
             className="w-1/3 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
           />
         </div>
+        <BatchRegister />
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-200">
           <tbody className="text-gray-600 text-sm font-light">
@@ -146,7 +171,16 @@ const UsersTable = () => {
         <td className="py-3 px-6 text-left">{user.name}</td>
         <td className="py-3 px-6 text-left">{user.email}</td>
         <td className="py-3 px-6 text-left">{user.telephone}</td>
-        <td className="py-3 px-6 text-left capitalize">{user.role}</td>
+        <td className="py-3 px-6 text-left capitalize">
+          <select
+            value={user.role}
+            onChange={(e) => handleUpdateRole(user.user_id, e.target.value)}
+            className="px-2 py-1 border rounded"
+          >
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+          </select>
+        </td>
         <td className="py-3 px-6 text-left">
           {new Date(user.created_at).toLocaleDateString()}
         </td>
@@ -180,6 +214,7 @@ const UsersTable = () => {
     </tr>
   )}
 </tbody>
+
           </table>
         </div>
       </div>
