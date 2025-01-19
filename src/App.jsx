@@ -66,7 +66,7 @@ function App() {
         <Route
           path="/users"
           element={
-            <ProtectedRoute requiredRole="user">
+            <ProtectedRoute requiredRole="admin">
               <UsersTable />
             </ProtectedRoute>
           }
