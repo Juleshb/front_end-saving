@@ -79,7 +79,7 @@ function Login() {
              <p className="text-sm m-2 sm:hidden">Contact our support team</p>  <Icon icon="akar-icons:whatsapp-fill" />
               </a>
       <div
-        className="absolute inset-0 bg-cover bg-center animate-pulse"
+        className="absolute inset-0 bg-cover bg-center "
         style={{
           backgroundImage:
             "url('https://kasisto.com/wp-content/uploads/2023/03/KAS230218-February-Blog-i.02-1200x712.jpg')",
