@@ -48,7 +48,8 @@ function Dashboard() {
         <div className="text-5xl text-yellow-500 bg-yellow-100 p-4 rounded-full"><Icon icon="qlementine-icons:money-16" width="32" height="32" /></div>
         <div>
           <h3 className="text-gray-500 text-sm font-medium">Total saving</h3>
-          <p className="text-2xl sm:text-lg font-semibold text-gray-800">Frw {balance}</p>
+          {/* <p className="text-2xl sm:text-lg font-semibold text-gray-800">Frw {balance}</p> */}
+          <p className="text-2xl sm:text-lg font-semibold text-gray-800">Pending..</p>
         </div>
       </div>
 
@@ -57,7 +58,7 @@ function Dashboard() {
         <div className="text-5xl text-purple-500 bg-purple-100 p-4 rounded-full"><Icon icon="game-icons:take-my-money" width="32" height="32" /></div>
         <div>
           <h3 className="text-gray-500 text-sm font-medium">My loan</h3>
-          <p className="text-2xl sm:text-lg font-semibold text-gray-800">Frw 0</p>
+          <p className="text-2xl sm:text-lg font-semibold text-gray-800">Pending..</p>
         </div>
       </div>
 
@@ -66,7 +67,7 @@ function Dashboard() {
         <div className="text-5xl text-pink-500 bg-pink-100 p-4 rounded-full"><Icon icon="game-icons:pay-money" width="32" height="32" /></div>
         <div>
           <h3 className="text-gray-500 text-sm font-medium">Unpaired loan</h3>
-          <p className="text-2xl sm:text-lg font-semibold text-gray-800">Frw 0</p>
+          <p className="text-2xl sm:text-lg font-semibold text-gray-800">Pending..</p>
         </div>
       </div>
 
