@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        Poppins: ['Poppins', 'sans-serif'], // Ensures fallback to system sans-serif
+        Poppins: ['Poppins', 'sans-serif'], 
       },
       colors: {
         primary: '#10CBFF',
@@ -12,7 +12,7 @@ module.exports = {
         textcol: '#726E6E',
       },
       animation: {
-        slide: 'slide 25s linear infinite', // Slide animation with infinite duration
+        slide: 'slide 25s linear infinite', 
       },
       keyframes: {
         slide: {
@@ -26,7 +26,6 @@ module.exports = {
       sm: '768px',
       md: '1060px',
 
-      // Adding custom breakpoints for small and extra-small screens
       'sm': { max: '639px' },
       'xs': { max: '414px' },
     },
