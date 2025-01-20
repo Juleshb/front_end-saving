@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Icon } from '@iconify/react';
+import Logo from "./assets/logo.png";
 
 const ResetPassword = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -8,6 +10,8 @@ const ResetPassword = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
+
+  const phoneNumber = '+250792445913';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,12 +53,42 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
-      <div className="max-w-screen-xl m-0 sm:m-10 bg-grey-100 flex justify-center flex-1">
-        <div className="xl:w-5/12 p-6 sm:p-12 bg-white shadow-md rounded-md">
-          <div className="my-12 border-b text-center">
-            <h1 className="text-2xl xl:text-3xl">Reset Password</h1>
-          </div>
+ <div className="relative min-h-screen flex items-center justify-center">
+        <a
+                    href={`https://wa.me/${phoneNumber}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="fixed bottom-4 animate-bounce flex justify-between right-4 bg-green-500 text-3xl hover:bg-green-600 text-white py-2 px-4 p-6 rounded-full z-10"
+                  >
+                 <p className="text-sm m-2 sm:hidden ">Contact our support team</p>  <Icon icon="akar-icons:whatsapp-fill" />
+                  </a>
+          <div
+            className="absolute inset-0 bg-cover bg-center animate-pulse"
+            style={{
+              backgroundImage:
+                "url('https://kasisto.com/wp-content/uploads/2023/03/KAS230218-February-Blog-i.02-1200x712.jpg')",
+            }}
+          ></div>
+          <div className="absolute inset-0 bg-black  opacity-30"></div>
+    
+          <div className="relative max-w-md border-t-2 border-primary w-full bg-white opacity-90 shadow-lg rounded-lg p-6">
+            <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
+              <img
+                src={Logo}
+                alt="Logo"
+                className="h-24 w-24 bg-white rounded-full border-t-2 border-r-2 border-l-2 border-primary shadow-md"
+              />
+            </div>
+    
+            <h1 className="text-3xl font-bold text-center text-primary mt-12 ">
+              CEPEDHU
+            </h1>
+            <h1 className="text-base font-thin  text-center text-gray-600 ">
+              (INDATIRWABAHIZI)
+            </h1>
+
+            <h1 className="text-xl font-bold animate-pulse text-center text-primary mt-6 mb-6">Reset Password</h1>
+          
           <div className="flex flex-col items-center">
             {successMessage && (
               <div className="border-dotted px-4 py-3 border-2 border-green-500 text-sm text-green-700 bg-green-100 text-center flex justify-between mt-4">
@@ -83,15 +117,15 @@ const ResetPassword = () => {
               />
               <button
                 type="submit"
-                className="mt-5 mb-3 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out"
+                className="mt-5 mb-3 tracking-wide font-semibold bg-primary text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out"
               >
                 Reset Password
               </button>
             </form>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      
   );
 };
 
