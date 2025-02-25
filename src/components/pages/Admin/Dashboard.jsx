@@ -17,7 +17,7 @@ function Dashboard() {
         <div className="text-5xl text-yellow-500 bg-yellow-100 p-4 rounded-full"><Icon icon="qlementine-icons:money-16" width="32" height="32" /></div>
         <div>
           <h3 className="text-gray-500 text-sm font-medium">Balance</h3>
-          <p className="text-2xl font-semibold text-gray-800">Frw 0.00</p>
+          <p className="text-sm font-semibold text-gray-800">Frw 0.00</p>
         </div>
       </div>
 
@@ -26,7 +26,7 @@ function Dashboard() {
         <div className="text-5xl text-purple-500 bg-purple-100 p-4 rounded-full"><Icon icon="game-icons:take-my-money" width="32" height="32" /></div>
         <div>
           <h3 className="text-gray-500 text-sm font-medium">Income</h3>
-          <p className="text-2xl font-semibold text-gray-800">Frw 0.00</p>
+          <p className="text-sm font-semibold text-gray-800">Frw 0.00</p>
         </div>
       </div>
 
@@ -35,7 +35,7 @@ function Dashboard() {
         <div className="text-5xl text-pink-500 bg-pink-100 p-4 rounded-full"><Icon icon="game-icons:pay-money" width="32" height="32" /></div>
         <div>
           <h3 className="text-gray-500 text-sm font-medium">Expense</h3>
-          <p className="text-2xl font-semibold text-gray-800">Frw 0.00</p>
+          <p className="text-sm font-semibold text-gray-800">Frw 0.00</p>
         </div>
       </div>
 
@@ -44,14 +44,14 @@ function Dashboard() {
         <div className="text-5xl text-teal-500 bg-teal-100 p-4 rounded-full"><Icon icon="solar:wallet-money-outline" width="32" height="32" /></div>
         <div>
           <h3 className="text-gray-500 text-sm font-medium">Total Saving</h3>
-          <p className="text-2xl font-semibold text-gray-800">Frw 0.00</p>
+          <p className="text-sm font-semibold text-gray-800">Frw 0.00</p>
         </div>
       </div>
     </div>
       <div className="mt-6flex">
        
 
-        <div className="flex w-full h-[100vh] ">
+        <div className="flex w-full ">
 
          
             <div className="w-full">

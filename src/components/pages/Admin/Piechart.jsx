@@ -91,7 +91,7 @@ const TransactionPieChart = () => {
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-lg  text-center text-gray-500 mb-4">Deposits vs Withdrawals</h2>
+      <h2 className="text-sm  text-center text-gray-500 mb-4">Deposits vs Withdrawals</h2>
       {loading ? (
         <p className="text-center text-gray-600">Loading...</p>
       ) : (

@@ -4,6 +4,8 @@ import { Icon } from "@iconify/react";
 import Sidebar from './Sidebar'
 import Navbar from "./nav";
 import BatchRegister from "./userbatchfile";
+import Logo from "../../assets/logo.png";
+import { motion } from 'framer-motion';
 
 const UsersTable = () => {
   const [users, setUsers] = useState([]);
@@ -14,6 +16,8 @@ const UsersTable = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState(""); 
   const [searchQuery, setSearchQuery] = useState(""); 
+  const [currentPage, setCurrentPage] = useState(1);
+  const logsPerPage = 10;
 
   const token = localStorage.getItem("token");
 
@@ -130,9 +134,15 @@ const UsersTable = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <p className="text-xl font-semibold text-gray-700">Loading...</p>
-      </div>
+      <div className="flex bg-primary justify-center items-center h-screen">
+  <motion.img 
+      src={Logo}
+      alt="Loading..." 
+      className="h-36"
+      animate={{ scale: [1, 1.5, 1] }}
+      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+  />
+</div>
     );
   }
 
@@ -144,38 +154,56 @@ const UsersTable = () => {
     );
   }
 
+  const indexOfLastLog = currentPage * logsPerPage;
+  const indexOfFirstLog = indexOfLastLog - logsPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstLog, indexOfLastLog);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
 <>
 <Sidebar />
 <div className="relative md:ml-64 bg-blueGray-100">
 <Navbar/>
-      <div className="max-w-7xl mt-20 mx-auto bg-white shadow-md rounded-lg overflow-hidden">
-      <div className="flex justify-between items-center p-4">
-          <h1 className="text-2xl font-bold">All Members</h1>
+      <div className="max-w-7xl mt-20 mx-auto bg-white  rounded-lg overflow-hidden">
+    
+        <BatchRegister />
+          <div className="flex justify-between items-center p-4">
+          <h1 className="text-sm font-bold">All Members</h1>
           <input
             type="text"
             placeholder="Search by Name, Email, or NID..."
             value={searchQuery}
             onChange={handleSearch}
-            className="w-1/3 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+            className="w-1/3 px-3 py-2 border border-gray-300 text-xs focus:outline-none focus:border-primary"
           />
         </div>
-        <BatchRegister />
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-200">
-          <tbody className="text-gray-600 text-sm font-light">
-  {filteredUsers.length > 0 ? (
-    filteredUsers.map((user) => (
-      <tr key={user.user_id} className="border-b border-gray-200 hover:bg-gray-100">
+        <div className="overflow-x-auto justify-items-center m-4">
+          <table className="min-w-full bg-white border border-primary">
+          <thead className="text-xs border border-primary  text-gray-500 bg-gray-50">
+  <tr>
+    <th className="py-3 px-6 text-left">NID</th>
+    <th className="py-3 px-6 text-left">Names</th>
+    <th className="py-3 px-6 text-left">Email</th>
+    <th className="py-3 px-6 text-left">Phone</th>
+    <th className="py-3 px-6 text-left">Role</th>
+    <th className="py-3 px-6 text-left">Created At</th>
+    <th className="py-3 px-6 text-left">Actions</th>
+  </tr>
+</thead>
+          <tbody className="text-gray-600 text-xs font-light">
+  {currentUsers.length > 0 ? (
+    currentUsers.map((user) => (
+      <tr key={user.user_id} className=" hover:bg-primary hover:text-white">
         <td className="py-3 px-6 text-left">{user.identification_number}</td>
         <td className="py-3 px-6 text-left">{user.name}</td>
         <td className="py-3 px-6 text-left">{user.email}</td>
-        <td className="py-3 px-6 text-left">{user.telephone}</td>
+        <td className="py-3 px-6 text-left">0{user.telephone}</td>
         <td className="py-3 px-6 text-left capitalize">
           <select
             value={user.role}
             onChange={(e) => handleUpdateRole(user.user_id, e.target.value)}
-            className="px-2 py-1 border rounded"
+            className="px-2 py-1  text-primary border-primary border"
           >
             <option value="admin">Admin</option>
             <option value="user">User</option>
@@ -184,24 +212,24 @@ const UsersTable = () => {
         <td className="py-3 px-6 text-left">
           {new Date(user.created_at).toLocaleDateString()}
         </td>
-        <td className="py-3 px-6 text-left flex gap-2">
+        <td className="py-3 px-6 text-left flex gap-2 bg-green-100 border-l-2 border-primary">
           <button
             onClick={() => handleView(user)}
-            className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600"
+            className=" text-green-400 px-3 py-1 rounded-lg hover:bg-green-400 hover:text-white"
           >
-            <Icon icon="mdi:eye" width="24" height="24" />
+            <Icon icon="mdi:eye" width="16" height="16" />
           </button>
           <button
             onClick={() => handleEdit(user)}
-            className="bg-primary text-white px-3 py-1 rounded-lg hover:bg-indigo-600"
+            className="text-primary px-3 py-1 rounded-lg hover:bg-primary hover:text-white"
           >
-            <Icon icon="la:edit" width="24" height="24" />
+            <Icon icon="la:edit" width="16" height="16" />
           </button>
           <button
             onClick={() => handleDelete(user.user_id)}
-            className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600"
+            className="text-red-500 px-3 py-1 rounded-lg hover:bg-red-500 hover:text-white"
           >
-            <Icon icon="hugeicons:delete-02" width="24" height="24" />
+            <Icon icon="hugeicons:delete-02" width="16" height="16" />
           </button>
         </td>
       </tr>
@@ -216,6 +244,15 @@ const UsersTable = () => {
 </tbody>
 
           </table>
+           <div className="flex justify-between  text-center mt-8 inline-flex items-center gap-3">
+                  <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} className="inline-flex size-8 items-center justify-center rounded-sm border border-gray-100 bg-white text-gray-900">
+                  <Icon icon="si:arrow-left-circle-line" width="24" height="24" />
+                  </button>
+                  <p className="text-xs text-gray-900">{currentPage} / {Math.ceil(filteredUsers.length / logsPerPage)}</p>
+                  <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === Math.ceil(filteredUsers.length / logsPerPage)} className="inline-flex size-8 items-center justify-center rounded-sm border border-gray-100 bg-white text-gray-900">
+                  <Icon icon="si:arrow-right-circle-line" width="24" height="24" />
+                  </button>
+                </div>
         </div>
       </div>
 {showModal && (

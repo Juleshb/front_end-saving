@@ -74,8 +74,8 @@ function App() {
           {deferredPrompt && (
            
 <div className="bg-primary flex justify-center p-2  text-white fixed inset-x-0 top-0 z-50">
-<Icon icon="line-md:bell-alert-filled" width="48" height="48" className="animate-bounce"/>
-  <p className="text-center text-sm m-2 font-medium"> CEPEDHU app is available for installation. Please
+<Icon icon="line-md:bell-alert-filled" width="25" height="25" className="animate-bounce text-yellow-500"/>
+  <p className="text-center text-xs m-2 font-medium"> CEPEDHU app is available for installation. Please
    click 
     <a href="#" className="inline-block underline m-2" onClick={handleInstallClick}> here to install CEPEDHU app </a>
   </p>

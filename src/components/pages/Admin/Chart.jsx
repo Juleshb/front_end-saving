@@ -142,10 +142,10 @@ const CombinedChart = () => {
   };
 
   return (
-    <div className="flex flex-wrap gap-2 justify-between p-6">
+    <div className="flex flex-wrap gap-2  justify-between overscroll-contain h-screen p-6">
       {/* Deposits Chart Card */}
-      <div className="w-5/12 bg-white rounded-lg shadow-md p-6 text-center">
-        <h3 className="text-lg  mb-4 text-gray-500">Deposits Over Time</h3>
+      <div className="w-5/12 bg-white rounded-lg  p-6 text-center">
+        <h3 className="text-sm  mb-4 text-gray-500">Deposits Over Time</h3>
         {depositChartData ? (
           <Line data={depositChartData} options={options} />
         ) : (
@@ -154,8 +154,8 @@ const CombinedChart = () => {
       </div>
 
       {/* Withdrawals Chart Card */}
-      <div className="w-5/12  bg-white rounded-lg shadow-md p-6 text-center">
-        <h3 className="text-lg  mb-4 text-gray-500">Withdrawals Over Time</h3>
+      <div className="w-5/12  bg-white rounded-lg  p-6 text-center">
+        <h3 className="text-sm  mb-4 text-gray-500">Withdrawals Over Time</h3>
         {withdrawalChartData ? (
           <Line data={withdrawalChartData} options={options} />
         ) : (

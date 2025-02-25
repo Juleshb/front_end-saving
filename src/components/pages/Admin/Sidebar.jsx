@@ -30,7 +30,7 @@ export default function Sidebar() {
                  </Link>
                </div>
                <div className="mt-auto">
-                 <ul className="md:flex-col text-base font-medium md:min-w-full text-primary flex flex-col list-none">
+                 <ul className="md:flex-col text-sm font-medium md:min-w-full text-primary flex flex-col list-none">
                    <li
                      className="font-semibold px-4 py-2 rounded-lg hover:bg-gray-100 text-gray-700"
                    >
@@ -39,7 +39,7 @@ export default function Sidebar() {
                          icon="material-symbols:logout"
                          width="24"
                          height="24"
-                         className="mr-3 text-lg"
+                         className="mr-3 text-sm"
                        />
                        Logout
                      </Link>
@@ -61,7 +61,7 @@ export default function Sidebar() {
               collapseShow
             }
           >
-           <ul className="md:flex-col text-base font-medium md:min-w-full text-primary flex flex-col list-none">
+           <ul className="md:flex-col text-sm font-medium md:min-w-full text-primary flex flex-col list-none">
               {/* Dashboard */}
               <li
                 className={`font-semibold px-4 py-2 mb-4 rounded-lg ${
@@ -71,7 +71,7 @@ export default function Sidebar() {
                 }`}
               >
                 <Link to="/dashboard" className="flex items-center">
-                  <Icon icon="ic:baseline-home" width="24" height="24" className="mr-3 text-lg" />
+                  <Icon icon="ic:baseline-home" width="16" height="16" className="mr-3 text-sm" />
                   Dashboard
                 </Link>
               </li>
@@ -85,7 +85,7 @@ export default function Sidebar() {
                 }`}
               >
                 <Link to="/transactions" className="flex items-center">
-                  <Icon icon="vaadin:money-exchange" width="24" height="24" className="mr-3 text-lg"/>
+                  <Icon icon="vaadin:money-exchange" width="16" height="16" className="mr-3 text-sm"/>
                   Transactions
                 </Link>
               </li>
@@ -99,7 +99,7 @@ export default function Sidebar() {
                 }`}
               >
                 <Link to="/account" className="flex items-center">
-                <Icon icon="tabler:user-filled" width="24" height="24" className="mr-3 text-lg"/>
+                <Icon icon="tabler:user-filled" width="16" height="16" className="mr-3 text-sm"/>
                 Deposit / Withdraw
                 </Link>
               </li>
@@ -112,7 +112,7 @@ export default function Sidebar() {
                 }`}
               >
                 <Link to="/users" className="flex items-center">
-                <Icon icon="clarity:users-solid" width="24" height="24" className="mr-3 text-lg"/>
+                <Icon icon="clarity:users-solid" width="16" height="16" className="mr-3 text-sm"/>
                   Members
                 </Link>
               </li>
@@ -126,7 +126,7 @@ export default function Sidebar() {
                 }`}
               >
                 <Link to="/investments" className="flex items-center">
-                <Icon icon="lucide-lab:house-manor" width="24" height="24" className="mr-3 text-lg"
+                <Icon icon="lucide-lab:house-manor" width="16" height="16" className="mr-3 text-sm"
                   />
                   Investments
                 </Link>
@@ -142,7 +142,7 @@ export default function Sidebar() {
                 }`}
               >
                 <Link to="/loans" className="flex items-center">
-                  <Icon icon="grommet-icons:money" width="24" height="24"  className="mr-3 text-lg"/>
+                  <Icon icon="grommet-icons:money" width="16" height="16"  className="mr-3 text-sm"/>
                   Loans
                 </Link>
               </li>
@@ -156,7 +156,7 @@ export default function Sidebar() {
                 }`}
               >
                 <Link to="/services" className="flex items-center">
-                  <Icon icon="mdi:tools" className="mr-3 text-lg" />
+                  <Icon icon="mdi:tools" className="mr-3 text-sm" />
                   Services
                 </Link>
               </li>
@@ -170,7 +170,7 @@ export default function Sidebar() {
                 }`}
               >
                 <Link to="/privileges" className="flex items-center">
-                  <Icon icon="ph:users-three-thin" className="mr-3 text-lg" />
+                  <Icon icon="ph:users-three-thin" className="mr-3 text-sm" />
                   My Privileges
                 </Link>
               </li>
@@ -184,7 +184,7 @@ export default function Sidebar() {
                 }`}
               >
                 <Link to="/settings" className="flex items-center">
-                <Icon icon="mage:settings-fill" width="24" height="24" className="mr-3 text-lg" />
+                <Icon icon="mage:settings-fill" width="16" height="16" className="mr-3 text-sm" />
                   Setting
                 </Link>
               </li>
@@ -193,7 +193,7 @@ export default function Sidebar() {
 
           {/* Logout at the Bottom */}
           <div className="mt-auto sm:hidden">
-            <ul className="md:flex-col text-base font-medium md:min-w-full text-primary flex flex-col list-none">
+            <ul className="md:flex-col text-sm font-medium md:min-w-full text-primary flex flex-col list-none">
               <li
                 className="font-semibold px-4 py-2 rounded-lg hover:bg-gray-100 text-gray-700"
               >
@@ -202,7 +202,7 @@ export default function Sidebar() {
                     icon="material-symbols:logout"
                     width="24"
                     height="24"
-                    className="mr-3 text-lg"
+                    className="mr-3 text-sm"
                   />
                   Logout
                 </Link>

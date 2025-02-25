@@ -3,7 +3,14 @@ import Navbar from './nav'
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Icon } from "@iconify/react";
+// import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useDropzone } from 'react-dropzone';
+import { motion } from 'framer-motion';
 import * as XLSX from "xlsx";
+import toast, { Toaster } from "react-hot-toast";
+import Logo from "../../assets/logo.png";
+
 
 function Account() {
   const [accounts, setAccounts] = useState([]);
@@ -11,8 +18,14 @@ function Account() {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [loading, setLoading] = useState(true);
-  const [loadingup, setLoadingup] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); 
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [error, setError] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const logsPerPage = 10;
   const [formData, setFormData] = useState({
     user_id: "",
     balance: "",
@@ -29,18 +42,33 @@ function Account() {
   });
 
   useEffect(() => {
-    const fetchAccounts = async () => {
-      try {
+    fetchAccounts();
+}, []);
+
+const fetchAccounts = async () => {
+    try {
         const response = await axiosInstance.get("/accounts");
         setAccounts(response.data);
+        setFilteredUsers(response.data); 
         setLoading(false);
-      } catch (error) {
-        setError("Failed to fetch accounts.");
+    } catch (error) {
+        toast.error("Failed to fetch accounts.");
         setLoading(false);
-      }
-    };
-    fetchAccounts();
-  }, []);
+    }
+};
+
+const handleSearch = (e) => {
+  const query = e.target.value.toLowerCase();
+  setSearchQuery(query);
+
+  const filtered = accounts.filter(
+    (account) =>
+      account.name.toLowerCase().includes(query) ||
+      account.email.toLowerCase().includes(query)
+  );
+
+  setFilteredUsers(filtered);
+};
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -59,26 +87,54 @@ function Account() {
   };
 
   
-  const handleFileUpload = async (e) => {
-    const file = e.target.files[0];
+  const onDrop = (acceptedFiles) => {
+    const file = acceptedFiles[0];
+    if (file && (file.type === "application/vnd.ms-excel" || file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
+        setSelectedFile(file);
+        toast.success(`Selected file: ${file.name}`);
+    } else {
+        toast.error("Invalid file type. Please upload an Excel file (.xls or .xlsx). ");
+    }
+};
+
+const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: ".xlsx,.xls",
+});
+
+const handleUploadClick = () => {
+    if (selectedFile) {
+        handleFileUpload(selectedFile);
+    } else {
+        toast.error("Please select a file before uploading.");
+    }
+};
+
+const handleFileUpload = async (file) => {
     if (!file) return;
 
     const formData = new FormData();
     formData.append("file", file);
 
-    setLoadingup(true); 
+    setUploading(true);
+    setProgress(0);
     try {
-      const response = await axiosInstance.post("/accounts/batch-deposit", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      alert(response.data.message);
+        await axiosInstance.post("/accounts/batch-deposit", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+            onUploadProgress: (progressEvent) => {
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                setProgress(percentCompleted);
+            },
+        });
+        toast.success("Batch deposit processed successfully.");
+        setSelectedFile(null);
+        fetchAccounts();
     } catch (error) {
-      alert("Failed to process batch deposits.");
+        toast.error("Failed to process batch deposits.");
     } finally {
-      setLoadingup(false); 
+        setUploading(false);
     }
-  };
-
+};
 
   const handleExport = () => {
     if (accounts.length === 0) {
@@ -163,103 +219,130 @@ function Account() {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return(
+    <div className="flex bg-primary justify-center items-center h-screen">
+    <motion.img 
+        src={Logo}
+        alt="Loading..." 
+        className="h-36"
+        animate={{ scale: [1, 1.5, 1] }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+    />
+  </div>
+  );
   if (error) return <p>{error}</p>;
+
+  const indexOfLastLog = currentPage * logsPerPage;
+  const indexOfFirstLog = indexOfLastLog - logsPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstLog, indexOfLastLog);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
 <>
 <Sidebar />
 <div className="relative md:ml-64 bg-blueGray-100">
 <Navbar />
-<div className=" mt-20 flex">
+<div className="flex">
         <div className=" w-full h-[100vh] bg-[#f5f7fa]">
 
-        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-6 p-6">
-      {/* Card 1 - My Balance */}
-      <div className="p-6 rounded-lg shadow-md flex items-center justify-between">
-        <div className="text-5xl text-yellow-500 bg-yellow-100 p-4 rounded-full"><Icon icon="qlementine-icons:money-16" width="32" height="32" /></div>
-        <div>
-          <h3 className="text-gray-500 text-sm font-medium">Balance</h3>
-          <p className="text-2xl font-semibold text-gray-800">Frw 0.00</p>
-        </div>
-      </div>
-
-      {/* Card 2 - Income */}
-      <div className="p-6 rounded-lg shadow-md flex items-center justify-between ">
-        <div className="text-5xl text-purple-500 bg-purple-100 p-4 rounded-full"><Icon icon="game-icons:take-my-money" width="32" height="32" /></div>
-        <div>
-          <h3 className="text-gray-500 text-sm font-medium">Income</h3>
-          <p className="text-2xl font-semibold text-gray-800">Frw 0.00</p>
-        </div>
-      </div>
-
-      {/* Card 3 - Expense */}
-      <div className="p-6 rounded-lg shadow-md flex items-center justify-between ">
-        <div className="text-5xl text-pink-500 bg-pink-100 p-4 rounded-full"><Icon icon="game-icons:pay-money" width="32" height="32" /></div>
-        <div>
-          <h3 className="text-gray-500 text-sm font-medium">Expense</h3>
-          <p className="text-2xl font-semibold text-gray-800">Frw 0.00</p>
-        </div>
-      </div>
-
-      {/* Card 4 - Total Saving */}
-      <div className="p-6 rounded-lg shadow-md flex items-center justify-between ">
-        <div className="text-5xl text-teal-500 bg-teal-100 p-4 rounded-full"><Icon icon="solar:wallet-money-outline" width="32" height="32" /></div>
-        <div>
-          <h3 className="text-gray-500 text-sm font-medium">Total Saving</h3>
-          <p className="text-2xl font-semibold text-gray-800">Frw 0.00</p>
-        </div>
-      </div>
-    </div>
+  <div className="grid grid-cols-1 mt-20 md:grid-cols-4 lg:grid-cols-4 gap-6 p-6">
+       {/* Card 1 - My Balance */}
+       <div className="p-6 rounded-lg shadow-md flex items-center justify-between">
+         <div className="text-5xl text-yellow-500 bg-yellow-100 p-4 rounded-full"><Icon icon="qlementine-icons:money-16" width="32" height="32" /></div>
+         <div>
+           <h3 className="text-gray-500 text-sm font-medium">Balance</h3>
+           <p className="text-sm font-semibold text-gray-800">Frw 0.00</p>
+         </div>
+       </div>
+ 
+       {/* Card 2 - Income */}
+       <div className="p-6 rounded-lg shadow-md flex items-center justify-between ">
+         <div className="text-5xl text-purple-500 bg-purple-100 p-4 rounded-full"><Icon icon="game-icons:take-my-money" width="32" height="32" /></div>
+         <div>
+           <h3 className="text-gray-500 text-sm font-medium">Income</h3>
+           <p className="text-sm font-semibold text-gray-800">Frw 0.00</p>
+         </div>
+       </div>
+ 
+       {/* Card 3 - Expense */}
+       <div className="p-6 rounded-lg shadow-md flex items-center justify-between ">
+         <div className="text-5xl text-pink-500 bg-pink-100 p-4 rounded-full"><Icon icon="game-icons:pay-money" width="32" height="32" /></div>
+         <div>
+           <h3 className="text-gray-500 text-sm font-medium">Expense</h3>
+           <p className="text-sm font-semibold text-gray-800">Frw 0.00</p>
+         </div>
+       </div>
+ 
+       {/* Card 4 - Total Saving */}
+       <div className="p-6 rounded-lg shadow-md flex items-center justify-between ">
+         <div className="text-5xl text-teal-500 bg-teal-100 p-4 rounded-full"><Icon icon="solar:wallet-money-outline" width="32" height="32" /></div>
+         <div>
+           <h3 className="text-gray-500 text-sm font-medium">Total Saving</h3>
+           <p className="text-sm font-semibold text-gray-800">Frw 0.00</p>
+         </div>
+       </div>
+     </div>
 
           <div className="p-6">
-     
-      <button
-            onClick={handleExport}
-            className="px-4 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600 transition"
-          >
-            Export Excel Format
-          </button>
-
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Batch Deposit Upload</h1>
-      <div className="relative">
-        <input
-          type="file"
-          accept=".xlsx, .xls"
-          onChange={handleFileUpload}
-          disabled={loading}
-          className={`w-full mb-4 px-3 py-2 border rounded ${
-            loading ? "bg-gray-200 cursor-not-allowed" : ""
-          }`}
-        />
-        {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-75">
-            <svg
-              className="animate-spin h-6 w-6 text-blue-500"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 2.137.835 4.085 2.209 5.576l1.791-1.285z"
-              ></path>
-            </svg>
+          <div className="container mb-4 mx-auto  p-8 border border-gray-200 ">
+          <div className="flex justify-between items-center mb-4">
+          <h1 className="text-xs font-semibold text-gray-700 mb-4">Batch Deposit Upload</h1>
+          <button 
+                      onClick={handleExport}
+                          className="flex items-center justify-center text-xs space-x-2 border-2 border-green-400 text-green-400 p-2 rounded-md hover:bg-green-400 hover:text-white transition"
+                      ><Icon icon="mdi:file-excel-outline" width="24" height="24" /> <span>Export Excel Format</span>    
+                      </button>
           </div>
-        )}
-      </div>
-  
-      <table className="min-w-full bg-white border border-gray-200">
-        <thead>
-          <tr className="bg-gray-200 text-gray-600 uppercase text-sm">
+
+           <Toaster position="top-center" reverseOrder={false} />
+                      <motion.div 
+                                    {...getRootProps()} 
+                                    className="mb-4 flex flex-col items-center text-xs h-36 content-center p-4 bg-green-100 border-2 border-dotted border-primary rounded-md cursor-pointer hover:bg-gray-100 transition"
+                                    whileHover={{ scale: 1.05 }}
+                                >
+                        <input {...getInputProps()} />
+                        <p className='justify-items-center  text-green-400'> <Icon icon="mdi:file-excel-outline" width="24" height="24" /> {selectedFile ? `${selectedFile.name}` : "Drag & drop a file here, or click to select one"} </p>
+                    </motion.div>
+                    <div className="mb-4">
+                        {uploading && (
+                            <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                                <div className="h-full bg-blue-500 transition-all" style={{ width: `${progress}%` }}></div>
+                            </div>
+                        )}
+                    </div>
+
+                    <button 
+                                    onClick={handleUploadClick} 
+                                    disabled={uploading}
+                                    className="flex items-center justify-center text-xs space-x-2 border-2 border-primary text-primary p-2 rounded-md hover:bg-primary hover:text-white transition"
+                                >
+                                    {uploading ? (
+                                        <>
+                                            <Icon icon="line-md:loading-loop" width="16" height="16" />
+                                            <span>Uploading... {progress}%</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Icon icon="line-md:cloud-alt-upload-loop" width="24" height="24" />
+                                            <span>Upload</span>
+                                        </>
+                                    )}
+                                </button>
+                    </div>
+                    <div className="flex justify-between items-center p-4">
+          <h1 className="text-sm font-bold">Accounts</h1>
+          <input
+            type="text"
+            placeholder="Search by Name, Email, or Acc number"
+            value={searchQuery}
+            onChange={handleSearch}
+            className="w-1/3 px-3 py-2 border border-gray-300 text-xs focus:outline-none focus:border-primary"
+          />
+        </div>
+  <div className="justify-items-center">
+      <table className="min-w-full bg-white border border-primary text-xs">
+        <thead className='text-xs border border-primary  text-gray-500 bg-gray-50'>
+          <tr className="">
             <th className="py-3 px-6 text-left">Names</th>
             <th className="py-3 px-6 text-left">NID</th>
             <th className="py-3 px-6 text-left">Account Number</th>
@@ -267,43 +350,68 @@ function Account() {
             <th className="py-3 px-6 text-left">Actions</th>
           </tr>
         </thead>
-        <tbody>
-          {accounts.map((account) => (
-            <tr key={account.account_id} className="hover:bg-gray-100">
+        <tbody className='text-gray-600 text-xs font-light'>
+        {currentUsers.length > 0 ? (
+          currentUsers.map((account) => (
+            <tr key={account.account_id} className=" hover:bg-primary hover:text-white">
               <td className="py-3 px-6">{account.name}</td>
               <td className="py-3 px-6">{account.identification_number}</td>
               <td className="py-3 px-6">{account.accountnumber}</td>
               <td className="py-3 px-6">Frw{account.balance}</td>
-              <td className="py-3 px-6 flex gap-2">
+              <td className="py-3 px-6 text-left flex gap-2 bg-green-100 border-l-2 border-primary">
+
                 <button
-                  onClick={() => handleModal("update", account)}
-                  className="bg-primary text-white px-3 py-1 rounded hover:bg-indigo-600"
+                    onClick={() => handleModal("update", account)}
+                  className="flex items-center justify-center text-xs space-x-2 border-2 border-primary text-primary p-2 rounded-md hover:bg-primary hover:text-white transition"
                 >
-                  Edit
+                <Icon icon="cuida:edit-outline" width="16" height="16" /> <span>Edit</span>  
+                
                 </button>
                 <button
                   onClick={() => handleModal("deposit", account)}
-                  className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                  className="flex items-center justify-center text-xs space-x-2 border-2 border-green-400 text-green-400 p-2 rounded-md hover:bg-green-400 hover:text-white transition"
                 >
-                  Deposit
+                <Icon icon="hugeicons:money-add-02" width="16" height="16" /> <span>Deposit</span>  
+                
                 </button>
                 <button
                   onClick={() => handleModal("withdraw", account)}
-                  className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                  className="flex items-center justify-center text-xs space-x-2 border-2 border-yellow-500 text-yellow-500 p-2 rounded-md hover:bg-yellow-500 hover:text-white transition "
                 >
-                  Withdraw
+                <Icon icon="hugeicons:money-exchange-01" width="16" height="16" /> <span>Withdraw</span>  
+                 
                 </button>
+
                 <button
                   onClick={() => handleDelete(account.account_id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                  className="flex items-center justify-center text-xs space-x-2 border-2 border-red-500 text-red-500 p-2 rounded-md hover:bg-red-500 hover:text-white transition "
                 >
-                  Delete
+                <Icon icon="weui:delete-on-outlined" width="16" height="16" /> <span>Delete</span>  
+                 
                 </button>
               </td>
             </tr>
-          ))}
+          ))
+  ) : (
+    <tr>
+      <td colSpan="7" className="text-center py-4 text-gray-500 font-medium">
+        No Account found matching your search.
+      </td>
+    </tr>
+  )}
         </tbody>
       </table>
+
+        <div className="flex justify-between  text-center mt-8 inline-flex items-center gap-3">
+                        <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} className="inline-flex size-8 items-center justify-center rounded-sm border border-gray-100 bg-white text-gray-900">
+                        <Icon icon="si:arrow-left-circle-line" width="24" height="24" />
+                        </button>
+                        <p className="text-xs text-gray-900">{currentPage} / {Math.ceil(filteredUsers.length / logsPerPage)}</p>
+                        <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === Math.ceil(filteredUsers.length / logsPerPage)} className="inline-flex size-8 items-center justify-center rounded-sm border border-gray-100 bg-white text-gray-900">
+                        <Icon icon="si:arrow-right-circle-line" width="24" height="24" />
+                        </button>
+                      </div>
+  </div>
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">

@@ -56,10 +56,10 @@ const Recenttransactions = () => {
 
   return (
     <div className="">
-      <span className="text-gray-500">Recent Transactions</span>
+      <span className="text-gray-500 text-xs">Recent Transactions</span>
       <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg overflow-x-auto">
         <thead>
-          <tr className="bg-gray-100 text-gray-500 text-sm uppercase">
+          <tr className="bg-gray-100 text-gray-500 text-xs ">
             <th className="py-3 px-6 text-left">Date</th>
             <th className="py-3 px-6 text-left">Transaction ID</th>
             <th className="py-3 px-6 text-left">Account Number</th>
@@ -79,29 +79,29 @@ const Recenttransactions = () => {
                       ? "mdi:arrow-down-circle-outline"
                       : "mdi:arrow-up-circle-outline"
                   }
-                  className={`mr-2 text-lg ${
+                  className={`mr-2 text-xs ${
                     transaction.transaction_type === "deposit" ? "text-green-500" : "text-red-500"
                   }`}
                 />
-                <span className="text-gray-700">
+                <span className="text-gray-700 text-xs">
                   {new Date(transaction.transaction_date).toLocaleDateString()}
                 </span>
               </td>
 
-              <td className="py-4 px-6 text-blue-500 text-sm underline cursor-pointer">
+              <td className="py-4 px-6 text-blue-500 text-xs underline cursor-pointer">
                TX-{transaction.transaction_number}
               </td>
 
-              <td className="py-4 px-6 text-gray-600 text-sm  cursor-pointer">
+              <td className="py-4 px-6 text-gray-600 text-xs  cursor-pointer">
                 {transaction.accountnumber}
               </td>
 
-              <td className="py-4 px-6 capitalize text-sm text-gray-600">
+              <td className="py-4 px-6 capitalize text-xs text-gray-600">
                 {transaction.name}
               </td>
 
               <td
-                className={`py-4 px-6 text-sm ${
+                className={`py-4 px-6 text-xs ${
                   transaction.transaction_type === "deposit" ? "text-green-500" : "text-red-500"
                 }`}
               >
@@ -115,7 +115,7 @@ const Recenttransactions = () => {
                   className="text-blue-600 border border-blue-500 px-3 py-1 rounded-full hover:bg-blue-100"
                   onClick={() => downloadReceipt(transaction)}
                 >
-                  <Icon icon="line-md:downloading-loop" width="24" height="24" />
+                  <Icon icon="line-md:downloading-loop" width="16" height="16" />
                 </button>
               </td>
             </tr>

@@ -3,6 +3,8 @@ import axios from "axios";
 import { Icon } from "@iconify/react";
 import Sidebar from './Sidebar'
 import Navbar from "./nav";
+import Logo from "../../assets/logo.png";
+import { motion } from 'framer-motion';
 
 const TransactionsTable = () => {
   const [transactions, setTransactions] = useState([]);
@@ -19,6 +21,7 @@ const TransactionsTable = () => {
   const [accountId, setAccountId] = useState("");
   const [transactionType, setTransactionType] = useState("");
   const [summary, setSummary] = useState(null);
+   const [loading, setLoading] = useState(true);
 
   const token = localStorage.getItem("token");
 
@@ -37,6 +40,9 @@ const TransactionsTable = () => {
         setFilteredTransactions(response.data);
       } catch (error) {
         console.error("Error fetching transactions:", error.message);
+      }
+      finally {
+        setLoading(false); 
       }
     };
     fetchTransactions();
@@ -119,6 +125,20 @@ const TransactionsTable = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex bg-primary justify-center items-center h-screen">
+  <motion.img 
+      src={Logo}
+      alt="Loading..." 
+      className="h-36"
+      animate={{ scale: [1, 1.5, 1] }}
+      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+  />
+</div>
+    );
+  }
+
   return (
     <>
     <Sidebar />
@@ -131,31 +151,31 @@ const TransactionsTable = () => {
           placeholder="Filter by Account ID"
           value={accountId}
           onChange={(e) => setAccountId(e.target.value)}
-          className="px-3 py-2 border rounded"
+          className="px-3 py-2 text-xs border rounded"
         />
-        <button onClick={handleFilterByAccount} className="bg-primary text-white px-4 py-2 rounded">
+        <button onClick={handleFilterByAccount} className="bg-primary text-xs text-white px-4 py-2 rounded">
           Filter by Account
         </button>
         <select
           value={transactionType}
           onChange={(e) => setTransactionType(e.target.value)}
-          className="px-3 py-2 border rounded"
+          className="px-3 py-2 border rounded text-xs"
         >
           <option value="">Select Type</option>
           <option value="deposit">Deposit</option>
           <option value="withdrawal">Withdrawal</option>
         </select>
-        <button onClick={handleFilterByType} className="bg-green-500 text-white px-4 py-2 rounded">
+        <button onClick={handleFilterByType} className="bg-green-500  text-xs text-white px-4 py-2 rounded">
           Filter by Type
         </button>
-        <button onClick={handleSummary} className="bg-yellow-500 text-white px-4 py-2 rounded">
+        <button onClick={handleSummary} className="bg-yellow-500 text-xs text-white px-4 py-2 rounded">
           Show Summary
         </button>
       </div>
 
       {summary && (
-        <div className="mb-4 p-4 bg-gray-100 rounded">
-          <h2 className="text-lg font-semibold">Transaction Summary</h2>
+        <div className="mb-4 text-xs p-4 bg-gray-100 rounded">
+          <h2 className="font-semibold">Transaction Summary</h2>
           <p>Total Transactions: {summary.total_transactions}</p>
           <p>Total Amount: Frw {summary.total_amount}</p>
         </div>
@@ -164,7 +184,7 @@ const TransactionsTable = () => {
 <div className="overflow-x-auto m-6 mt-6">
       <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
         <thead>
-          <tr className="bg-gray-100 text-gray-500 text-sm uppercase">
+          <tr className="bg-gray-100 text-gray-500 text-xs">
             <th className="py-3 px-6 text-left">Description</th>
             <th className="py-3 px-6 text-left">Transaction ID</th>
             <th className="py-3 px-6 text-left">Account Number</th>
@@ -175,7 +195,7 @@ const TransactionsTable = () => {
           </tr>
         </thead>
 
-        <tbody>
+        <tbody className="text-xs">
           {filteredTransactions.map((transaction) => (
             <tr key={transaction.id} className="hover:bg-gray-50 border-b">
               <td className="py-4 px-6 flex items-center">
@@ -217,7 +237,7 @@ const TransactionsTable = () => {
 
               <td className="py-4 px-6">
                 <button className="text-blue-600 border border-primary px-3 py-1 rounded-full hover:bg-blue-100">
-                <Icon icon="line-md:downloading-loop" width="24" height="24" />
+                <Icon icon="line-md:downloading-loop" width="16" height="16" />
                 </button>
               </td>
             </tr>

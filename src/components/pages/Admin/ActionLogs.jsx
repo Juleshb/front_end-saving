@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaSearch, FaTrashAlt, FaDatabase, FaClock } from 'react-icons/fa';
+import { FaSearch, FaDatabase, FaClock } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import { Icon } from "@iconify/react";
 
 const ActionLogs = () => {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const logsPerPage = 10;
+  const logsPerPage = 3;
 
   const token = localStorage.getItem('token');
 
@@ -48,11 +50,11 @@ const ActionLogs = () => {
 
   return (
     <div className="max-w-7xl mx-auto bg-gray-50 py-8 px-4">
-      <h2 className="text-xl font-bold text-center text-gray-700 mb-8">
+      <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}
+        className="text-sm font-bold text-center text-gray-700 mb-8">
         <span className="text-blue-500">Activity Logs</span>
-      </h2>
+      </motion.h2>
 
-      {/* Search Bar */}
       <div className="flex justify-between items-center mb-6">
         <div className="relative w-full max-w-md">
           <input
@@ -60,106 +62,61 @@ const ActionLogs = () => {
             placeholder="Search logs..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 pl-10 border border-gray-300 text-xs rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <FaSearch className="absolute top-3 left-3 text-gray-400 text-lg" />
+          <FaSearch className="absolute top-3 left-3 text-gray-400 text-sm" />
         </div>
         <button
           onClick={() => setSearch('')}
-          className="ml-4 px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none"
+          className="ml-4 px-4 py-2 text-xs text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none"
         >
-          Clear <FaTrashAlt className="inline ml-2" />
+          Clear 
         </button>
       </div>
 
-      {/* Logs Table */}
       {loading ? (
         <div className="flex justify-center items-center h-40">
-          <svg
-            className="animate-spin h-8 w-8 text-blue-500"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v8z"
-            ></path>
+          <svg className="animate-spin h-8 w-8 text-blue-500" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
           </svg>
         </div>
       ) : currentLogs.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {currentLogs.map((log) => (
-            <div
-              key={log.id}
-              className=" bg-white p-2 shadow-md hover:shadow-lg transition-shadow duration-200"
-            >
-                <details className="group [&_summary::-webkit-details-marker]:hidden">
-    <summary
-      className="flex cursor-pointer items-center justify-between gap-1.5 rounded-lg bg-gray-50 p-4 text-gray-900"
-    >
-       <div className="flex items-center justify-between mb-3">
-                <span className="flex items-center text-lg font-semibold text-gray-700">
-                  <FaDatabase className="text-blue-500 mr-2" />
-                  {log.affected_table || 'N/A'}
-                </span>
-               
-              </div>
+            <motion.div key={log.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}
+              className="bg-white hover:shadow-lg transition-shadow duration-300 rounded-lg">
 
-      <svg
-        className="size-5 shrink-0 transition duration-300 group-open:-rotate-180"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-      </svg>
-    </summary>
+              <div className="relative rounded-lg border shadow-lg">
+  
+
+  <div className="flex items-center gap-4 p-4">
+  <FaDatabase className="text-blue-500 mr-2" /> 
+
     <div>
+      <p className="font-medium text-xs text-gray-900"><span className="font-medium text-blue-600"></span>{log.action}</p>
 
-    <p className="text-gray-700 mb-3">
-                <span className="font-medium text-blue-600">Action: </span>
-                {log.action}
-              </p>
-              <p className="text-sm mb-3 text-gray-500">{log.details || 'No additional details'}</p>
-              <time className="flex items-center text-sm text-gray-500">
-                  <FaClock className="text-gray-400 mr-2" />
-                  {new Date(log.timestamp).toLocaleString()}
-                </time>
-                </div>
-  </details>
-            </div>
+      <p className="line-clamp-1 text-xs text-gray-500">
+      <time className="flex items-center text-xs text-gray-500"><FaClock className="text-gray-400 mr-2" />{new Date(log.timestamp).toLocaleString()}</time>
+      </p>
+    </div>
+  </div>
+</div>
+            </motion.div>
           ))}
         </div>
       ) : (
         <div className="text-center text-gray-500">No logs found.</div>
       )}
 
-      {/* Pagination */}
-      <div className="flex justify-center mt-8">
-        {Array.from({ length: Math.ceil(filteredLogs.length / logsPerPage) }).map((_, index) => (
-          <button
-            key={index}
-            onClick={() => paginate(index + 1)}
-            className={`mx-1 px-4 py-2 rounded-lg text-sm font-medium ${
-              currentPage === index + 1
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
-          >
-            {index + 1}
-          </button>
-        ))}
+      <div className="flex justify-between w-full text-center mt-8 inline-flex items-center gap-3">
+        <button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} className="inline-flex size-8 items-center justify-center rounded-sm border border-gray-100 bg-white text-gray-900">
+        <Icon icon="si:arrow-left-circle-line" width="24" height="24" />
+        </button>
+        <p className="text-xs text-gray-900">{currentPage} / {Math.ceil(filteredLogs.length / logsPerPage)}</p>
+        <button onClick={() => paginate(currentPage + 1)} disabled={currentPage === Math.ceil(filteredLogs.length / logsPerPage)} className="inline-flex size-8 items-center justify-center rounded-sm border border-gray-100 bg-white text-gray-900">
+        <Icon icon="si:arrow-right-circle-line" width="24" height="24" />
+        </button>
       </div>
     </div>
   );
